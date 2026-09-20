@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Les mates d'Arnau</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        iosBg: 'var(--ios-bg)',
+                        iosCard: 'var(--ios-card)',
+                        iosText: 'var(--ios-text)',
+                        iosTextSec: 'var(--ios-text-secondary)',
+                        iosBorder: 'var(--ios-border)',
+                        iosBlue: 'var(--ios-blue)',
+                        iosGreen: 'var(--ios-green)',
+                        iosRed: 'var(--ios-red)'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --ios-bg: #F2F2F7;
+            --ios-card: #FFFFFF;
+            --ios-blue: #007AFF;
+            --ios-blue-active: #005bb5;
+            --ios-green: #34C759;
+            --ios-red: #FF3B30;
+            --ios-text: #000000;
+            --ios-text-secondary: #8E8E93;
+            --ios-border: #C6C6C8;
+            --ios-segment-bg: #E5E5EA;
+            --ios-segment-active: #FFFFFF;
+            --numpad-bg: #D1D1D6;
+            --numpad-btn: #FFFFFF;
+            --numpad-btn-active: #B5B5B9;
+            --numpad-special: #ACB1B9;
+            --numpad-text: #000000;
+        }
+
+        .dark {
+            --ios-bg: #000000;
+            --ios-card: #1C1C1E;
+            --ios-blue: #0A84FF;
+            --ios-blue-active: #0070df;
+            --ios-green: #30D158;
+            --ios-red: #FF453A;
+            --ios-text: #FFFFFF;
+            --ios-text-secondary: #8E8E93;
+            --ios-border: #38383A;
+            --ios-segment-bg: #2C2C2E;
+            --ios-segment-active: #636366;
+            --numpad-bg: #2C2C2E;
+            --numpad-btn: #48484A;
+            --numpad-btn-active: #3A3A3C;
+            --numpad-special: #3A3A3C;
+            --numpad-text: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--ios-bg);
+            color: var(--ios-text);
+            overscroll-behavior-y: none;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            min-height: 100dvh; /* Soporte dinámico para navegadores móviles */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .ios-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .dark .ios-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .ios-card {
+            background-color: var(--ios-card);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 20px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .ios-btn {
+            background-color: var(--ios-blue);
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-radius: 16px;
+            padding: 16px 20px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 56px;
+        }
+        .ios-btn:active {
+            transform: scale(0.97);
+            background-color: var(--ios-blue-active);
+        }
+
+        .segmented-control {
+            display: flex;
+            background-color: var(--ios-segment-bg);
+            border-radius: 10px;
+            padding: 3px;
+            margin-bottom: 16px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .segment {
+            flex: 1;
+            text-align: center;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--ios-text);
+            transition: background-color 0.2s, box-shadow 0.2s, color 0.3s;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .segment.active {
+            background-color: var(--ios-segment-active);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .ios-toggle {
+            position: relative;
+            width: 50px;
+            height: 30px;
+            appearance: none;
+            background: var(--ios-segment-bg);
+            border-radius: 15px;
+            outline: none;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+        .ios-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 26px;
+            height: 26px;
+            background: #FFF;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        .ios-toggle:checked {
+            background: var(--ios-green);
+        }
+        .ios-toggle:checked::after {
+            transform: translateX(20px);
+        }
+
+        .big-input {
+            width: 100%;
+            text-align: center;
+            font-size: 4rem; /* Reducido de 4.5rem */
+            font-weight: 800;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--ios-text);
+            padding: 5px 0; /* Reducido de 10px */
+            margin: 5px 0; /* Reducido de 10px */
+        }
+        .big-input::placeholder {
+            color: var(--ios-text-secondary);
+            opacity: 0.5;
+        }
+        
+        .time-input {
+            width: 70px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: 2px solid var(--ios-border);
+            border-radius: 12px;
+            padding: 12px 8px;
+            background: transparent;
+            color: var(--ios-text);
+            outline: none;
+            transition: border-color 0.2s, color 0.3s;
+        }
+        .time-input:focus {
+            border-color: var(--ios-blue);
+        }
+
+        .view {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            flex-grow: 1;
+            padding: 10px 20px 20px 20px; /* Reducido el padding top */
+            box-sizing: border-box;
+        }
+        .view.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .table-btn {
+            background: transparent;
+            border: 2px solid var(--ios-border);
+            border-radius: 14px;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--ios-text);
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .table-btn.selected {
+            background: var(--ios-blue);
+            border-color: var(--ios-blue);
+            color: #FFF;
+        }
+
+        .heart {
+            font-size: 1.8rem;
+            color: var(--ios-border);
+            margin: 0 4px;
+            transition: color 0.3s, transform 0.2s;
+        }
+        .heart.filled { color: var(--ios-red); }
+        .heart.pop { animation: popHeart 0.3s ease; }
+        @keyframes popHeart {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+        
+        .error-shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(4px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+            40%, 60% { transform: translate3d(6px, 0, 0); }
+        }
+
+        .numpad-container {
+            width: 100%;
+            max-width: 360px;
+            margin: 0 auto;
+            padding-top: 5px; /* Reducido de 10px */
+            padding-bottom: env(safe-area-inset-bottom); /* Protección inferior en iOS */
+        }
+        .numpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px; /* Reducido de 10px */
+            padding: 10px; /* Reducido de 12px */
+            background: var(--numpad-bg);
+            border-radius: 16px;
+            transition: background-color 0.3s;
+        }
+        .numpad-btn {
+            background: var(--numpad-btn);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.6rem; /* Reducido de 1.8rem */
+            font-weight: 500;
+            padding: 10px 0; /* Reducido de 12px */
+            box-shadow: 0 1px 0px rgba(0,0,0,0.3);
+            color: var(--numpad-text);
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+        }
+        .numpad-btn:active { background: var(--numpad-btn-active); }
+        .numpad-btn.special { background: var(--numpad-special); font-size: 1.4rem; color: var(--ios-text); }
+        .numpad-btn.special:active { background: var(--numpad-btn); }
+        .numpad-btn.enter { background: var(--ios-blue); color: white; font-weight: 600; font-size: 1.2rem; }
+        .numpad-btn.enter:active { background: var(--ios-blue-active); }
+    </style>
+</head>
+<body>
+
+    <button id="theme-toggle" class="fixed top-4 right-4 z-50 p-3 rounded-full bg-iosCard ios-shadow text-iosText active:scale-95 transition-transform" onclick="toggleTheme()">
+        <svg id="theme-icon-light" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+    </button>
+
+    <div id="view-home" class="view active justify-center">
+        <h1 class="text-center font-extrabold text-4xl mb-8 pt-2 tracking-tight">Les mates d'Arnau</h1>
+        
+        <div class="ios-card ios-shadow cursor-pointer active:scale-95 transition-transform" onclick="navigate('rapid-config')">
+            <div class="flex items-center space-x-5">
+                <div class="bg-blue-100 dark:bg-blue-900 p-4 rounded-full text-blue-600 dark:text-blue-300 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold">Càlcul Mental</h2>
+                    <p class="text-base text-iosTextSec mt-1 leading-snug">Suma, resta i multiplica a contrarellotge.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="ios-card ios-shadow cursor-pointer active:scale-95 transition-transform" onclick="navigate('taules-config')">
+            <div class="flex items-center space-x-5">
+                <div class="bg-green-100 dark:bg-green-900 p-4 rounded-full text-green-600 dark:text-green-300 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold">Taules de Multiplicar</h2>
+                    <p class="text-base text-iosTextSec mt-1 leading-snug">Practica amb vides. Sense pressa.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-rapid-config" class="view">
+        <button onclick="navigate('home')" class="text-iosBlue font-semibold text-lg flex items-center mb-4 self-start active:opacity-70 p-2 -ml-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg> Enrere
+        </button>
+        
+        <h2 class="text-3xl font-bold mb-4">Configura el repte</h2>
+
+        <div class="ios-card ios-shadow">
+            <h3 class="text-xs font-bold text-iosTextSec uppercase tracking-wider mb-2">Operacions</h3>
+            <div class="flex justify-between items-center py-3 border-b border-iosBorder">
+                <span class="font-semibold text-xl">Sumes (+)</span>
+                <input type="checkbox" id="toggle-add" class="ios-toggle" checked>
+            </div>
+            <div class="flex justify-between items-center py-3 border-b border-iosBorder">
+                <span class="font-semibold text-xl">Restes (-)</span>
+                <input type="checkbox" id="toggle-sub" class="ios-toggle">
+            </div>
+            <div class="flex justify-between items-center py-3">
+                <span class="font-semibold text-xl">Multiplicacions (×)</span>
+                <input type="checkbox" id="toggle-mul" class="ios-toggle">
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:space-x-4 w-full">
+            <div class="ios-card ios-shadow flex-1">
+                <h3 class="text-xs font-bold text-iosTextSec uppercase tracking-wider mb-3">Ordre</h3>
+                <div class="segmented-control" id="rapid-order-control">
+                    <div class="segment active" data-val="random">Aleatori</div>
+                    <div class="segment" data-val="linear">Lineal</div>
+                </div>
+            </div>
+
+            <div class="ios-card ios-shadow flex-1">
+                <h3 class="text-xs font-bold text-iosTextSec uppercase tracking-wider mb-3">Temps</h3>
+                <div class="flex items-center justify-center space-x-3">
+                    <div class="flex flex-col items-center">
+                        <input type="number" id="rapid-min" class="time-input" value="2" min="0" max="60" inputmode="numeric" pattern="[0-9]*">
+                        <span class="text-xs text-iosTextSec mt-2 font-medium">Min</span>
+                    </div>
+                    <span class="text-3xl font-bold pb-6 text-iosTextSec">:</span>
+                    <div class="flex flex-col items-center">
+                        <input type="number" id="rapid-sec" class="time-input" value="0" min="0" max="59" inputmode="numeric" pattern="[0-9]*">
+                        <span class="text-xs text-iosTextSec mt-2 font-medium">Seg</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="ios-btn mt-4 shadow-md text-xl py-4" onclick="startRapidGame()">Començar</button>
+    </div>
+
+    <div id="view-rapid-game" class="view">
+        <div class="flex justify-between items-center mb-2 pt-0">
+            <button onclick="endRapidGame(true)" class="text-iosRed font-semibold text-lg active:opacity-70 p-2 -ml-2">Acabar</button>
+            <div id="rapid-timer-display" class="text-4xl font-black tabular-nums tracking-wider text-iosText">02:00</div>
+            <div class="w-16"></div>
+        </div>
+
+        <div class="flex-grow flex flex-col justify-center items-center pb-2">
+            <div class="ios-card ios-shadow w-full max-w-sm text-center py-4 relative overflow-hidden mb-2">
+                <div id="rapid-question" class="text-6xl font-extrabold tracking-tighter mb-0 text-iosText">--</div>
+                
+                <form id="rapid-form" onsubmit="handleRapidSubmit(event)" class="w-full">
+                    <input type="text" id="rapid-input" class="big-input" placeholder="?" readonly required>
+                    <button type="submit" class="hidden">Submit</button>
+                </form>
+            </div>
+            
+            <div class="numpad-container">
+                <div class="numpad">
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('1')">1</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('2')">2</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('3')">3</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('4')">4</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('5')">5</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('6')">6</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('7')">7</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('8')">8</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('9')">9</button>
+                    <button type="button" class="numpad-btn special" onclick="typeNumpad('del')">⌫</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('0')">0</button>
+                    <button type="button" class="numpad-btn enter" onclick="submitNumpad()">Següent</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-rapid-results" class="view">
+        <h2 class="text-4xl font-extrabold text-center mb-6 pt-4 text-iosText">Temps esgotat!</h2>
+        
+        <div class="ios-card ios-shadow text-center">
+            <div class="flex justify-around items-center my-4">
+                <div class="flex flex-col">
+                    <span class="text-5xl font-black text-iosBlue" id="res-total">0</span>
+                    <span class="text-xs text-iosTextSec font-bold uppercase mt-2">Total</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-5xl font-black text-iosGreen" id="res-correct">0</span>
+                    <span class="text-xs text-iosTextSec font-bold uppercase mt-2">Encerts</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-5xl font-black text-iosRed" id="res-errors">0</span>
+                    <span class="text-xs text-iosTextSec font-bold uppercase mt-2">Errades</span>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-iosBorder">
+                <span class="text-6xl font-black text-iosText" id="res-percentage">0%</span>
+                <p class="text-sm text-iosTextSec font-bold uppercase mt-2">D'encert</p>
+            </div>
+        </div>
+
+        <div id="errors-container" class="mt-4 hidden mb-8">
+            <h3 class="font-bold text-xl mb-4 px-2">A repassar:</h3>
+            <div class="ios-card ios-shadow p-0 overflow-hidden">
+                <ul id="errors-list" class="divide-y divide-iosBorder max-h-64 overflow-y-auto w-full">
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-auto pb-4">
+            <button class="ios-btn shadow-sm text-xl py-4" onclick="navigate('home')">Tornar al menú</button>
+        </div>
+    </div>
+
+    <div id="view-taules-config" class="view">
+        <button onclick="navigate('home')" class="text-iosBlue font-semibold text-lg flex items-center mb-4 self-start active:opacity-70 p-2 -ml-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg> Enrere
+        </button>
+        
+        <h2 class="text-3xl font-bold mb-4">Tria les Taules</h2>
+
+        <div class="ios-card ios-shadow">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xs font-bold text-iosTextSec uppercase tracking-wider">Taules a practicar</h3>
+                <button class="text-iosBlue text-sm font-bold active:opacity-70 p-2 -mr-2" onclick="toggleAllTables()">Totes / Cap</button>
+            </div>
+            <div class="table-grid" id="tables-grid">
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:space-x-4 w-full">
+            <div class="ios-card ios-shadow flex-1">
+                <h3 class="text-xs font-bold text-iosTextSec uppercase tracking-wider mb-3">Ordre</h3>
+                <div class="segmented-control" id="taules-order-control">
+                    <div class="segment active" data-val="linear">Lineal</div>
+                    <div class="segment" data-val="random">Aleatori</div>
+                </div>
+            </div>
+
+            <div class="ios-card ios-shadow flex-1 flex flex-row items-center justify-between sm:flex-col sm:justify-start">
+                <h3 class="text-xs font-bold text-iosTextSec uppercase tracking-wider sm:mb-3">Preguntes</h3>
+                <input type="number" id="taules-count" class="time-input" value="10" min="1" max="100" inputmode="numeric" pattern="[0-9]*">
+            </div>
+        </div>
+
+        <button class="ios-btn mt-4 shadow-md text-xl py-4" onclick="startTaulesGame()">Jugar</button>
+    </div>
+
+    <div id="view-taules-game" class="view">
+        <div class="flex justify-between items-center mb-2 pt-0">
+            <button onclick="endTaulesGame(false)" class="text-iosTextSec font-semibold text-lg active:opacity-70 p-2 -ml-2">Sortir</button>
+            <div class="flex space-x-1" id="hearts-container">
+                <span class="heart filled">♥</span>
+                <span class="heart filled">♥</span>
+                <span class="heart filled">♥</span>
+            </div>
+            <div id="taules-progress" class="text-base font-bold text-iosTextSec w-16 text-right">1/10</div>
+        </div>
+
+        <div class="flex-grow flex flex-col justify-center items-center pb-2">
+            <div id="taules-card" class="ios-card ios-shadow w-full max-w-sm text-center py-4 transition-colors duration-300 mb-2">
+                <div id="taules-question" class="text-6xl font-extrabold tracking-tighter mb-0 text-iosText">--</div>
+                
+                <form id="taules-form" onsubmit="handleTaulesSubmit(event)" class="w-full">
+                    <input type="text" id="taules-input" class="big-input" placeholder="?" readonly required>
+                    <button type="submit" class="hidden">Submit</button>
+                </form>
+                
+                <div id="taules-feedback" class="h-6 mt-1 text-xl font-bold text-iosRed opacity-0 transition-opacity">Error!</div>
+            </div>
+
+            <div class="numpad-container">
+                <div class="numpad">
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('1')">1</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('2')">2</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('3')">3</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('4')">4</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('5')">5</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('6')">6</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('7')">7</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('8')">8</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('9')">9</button>
+                    <button type="button" class="numpad-btn special" onclick="typeNumpad('del')">⌫</button>
+                    <button type="button" class="numpad-btn" onclick="typeNumpad('0')">0</button>
+                    <button type="button" class="numpad-btn enter" onclick="submitNumpad()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-taules-results" class="view justify-center items-center">
+        <div class="ios-card ios-shadow w-full max-w-sm text-center py-12">
+            <div id="taules-res-icon" class="text-8xl mb-6 drop-shadow-md">🏆</div>
+            <h2 id="taules-res-title" class="text-4xl font-extrabold mb-3 text-iosGreen tracking-tight">Molt bé!</h2>
+            <p id="taules-res-desc" class="text-iosTextSec mb-8 font-medium text-lg leading-snug">Has completat la missió amb èxit.</p>
+            
+            <div class="text-center mb-10">
+                <span class="text-sm text-iosTextSec font-bold uppercase tracking-wider block mb-2">Encerts</span>
+                <span class="text-7xl font-black" id="taules-res-score">0</span>
+            </div>
+            
+            <button class="ios-btn w-full text-xl py-4" onclick="navigate('home')">Tornar al menú</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        let currentActiveInput = null;
+        const state = {
+            rapid: {
+                timerId: null,
+                timeLeft: 0,
+                questionsPool: [],
+                currentQIndex: 0,
+                totalAnswered: 0,
+                correctCount: 0,
+                errors: [],
+                order: 'random'
+            },
+            taules: {
+                selected: new Set([2,3]),
+                order: 'linear',
+                questionsPool: [],
+                currentQIndex: 0,
+                lives: 3,
+                correctCount: 0,
+                maxQuestions: 10
+            }
+        };
+
+        function typeNumpad(val) {
+            if (!currentActiveInput) return;
+            if (val === 'del') {
+                currentActiveInput.value = currentActiveInput.value.slice(0, -1);
+            } else {
+                if (currentActiveInput.value.length < 5) {
+                    currentActiveInput.value += val;
+                }
+            }
+        }
+
+        function submitNumpad() {
+            if (!currentActiveInput || currentActiveInput.value === '') return;
+            
+            if (currentActiveInput.id === 'rapid-input') {
+                document.getElementById('rapid-form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+            } else if (currentActiveInput.id === 'taules-input') {
+                document.getElementById('taules-form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!currentActiveInput) return;
+            const viewHome = document.getElementById('view-home').classList.contains('active');
+            if (viewHome) return; 
+
+            if (e.key >= '0' && e.key <= '9') {
+                e.preventDefault();
+                typeNumpad(e.key);
+            } else if (e.key === 'Backspace') {
+                e.preventDefault();
+                typeNumpad('del');
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                submitNumpad();
+            }
+        });
+
+        function navigate(viewId) {
+            document.querySelectorAll('.view').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.getElementById(`view-${viewId}`).classList.add('active');
+            window.scrollTo(0, 0); 
+            
+            if (viewId === 'rapid-game') currentActiveInput = document.getElementById('rapid-input');
+            else if (viewId === 'taules-game') currentActiveInput = document.getElementById('taules-input');
+            else currentActiveInput = null;
+        }
+
+        document.querySelectorAll('.segmented-control').forEach(control => {
+            const segments = control.querySelectorAll('.segment');
+            segments.forEach(seg => {
+                seg.addEventListener('click', () => {
+                    segments.forEach(s => s.classList.remove('active'));
+                    seg.classList.add('active');
+                    
+                    if (control.id === 'rapid-order-control') {
+                        state.rapid.order = seg.dataset.val;
+                    } else if (control.id === 'taules-order-control') {
+                        state.taules.order = seg.dataset.val;
+                    }
+                });
+            });
+        });
+
+        const grid = document.getElementById('tables-grid');
+        for (let i = 1; i <= 10; i++) {
+            const btn = document.createElement('div');
+            btn.className = `table-btn ${state.taules.selected.has(i) ? 'selected' : ''}`;
+            btn.textContent = i;
+            btn.onclick = () => {
+                if (state.taules.selected.has(i)) {
+                    state.taules.selected.delete(i);
+                    btn.classList.remove('selected');
+                } else {
+                    state.taules.selected.add(i);
+                    btn.classList.add('selected');
+                }
+                updateTaulesMaxCount();
+            };
+            grid.appendChild(btn);
+        }
+
+        function toggleAllTables() {
+            const btns = document.querySelectorAll('.table-btn');
+            if (state.taules.selected.size === 10) {
+                state.taules.selected.clear();
+                btns.forEach(b => b.classList.remove('selected'));
+            } else {
+                for (let i = 1; i <= 10; i++) state.taules.selected.add(i);
+                btns.forEach(b => b.classList.add('selected'));
+            }
+            updateTaulesMaxCount();
+        }
+
+        function updateTaulesMaxCount() {
+            const countInput = document.getElementById('taules-count');
+            const totalPossible = state.taules.selected.size * 10;
+            if (totalPossible === 0) {
+                countInput.value = 0;
+            } else if (parseInt(countInput.value) > totalPossible || state.taules.selected.size === 1) {
+                countInput.value = Math.min(10, totalPossible);
+            }
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startRapidGame() {
+            const add = document.getElementById('toggle-add').checked;
+            const sub = document.getElementById('toggle-sub').checked;
+            const mul = document.getElementById('toggle-mul').checked;
+            
+            if (!add && !sub && !mul) {
+                alert("Si us plau, selecciona almenys un tipus d'operació.");
+                return;
+            }
+
+            const min = parseInt(document.getElementById('rapid-min').value) || 0;
+            const sec = parseInt(document.getElementById('rapid-sec').value) || 0;
+            state.rapid.timeLeft = (min * 60) + sec;
+            
+            if (state.rapid.timeLeft <= 0) {
+                alert("El temps ha de ser superior a 0.");
+                return;
+            }
+
+            let pool = [];
+            if (add) {
+                for (let i = 1; i <= 10; i++) {
+                    for (let j = 1; j <= 10; j++) pool.push({ q: `${i} + ${j}`, a: i + j, type: 'add' });
+                }
+            }
+            if (sub) {
+                for (let i = 1; i <= 10; i++) {
+                    for (let j = 1; j <= 10; j++) {
+                        let total = i + j;
+                        pool.push({ q: `${total} - ${i}`, a: j, type: 'sub' });
+                    }
+                }
+            }
+            if (mul) {
+                for (let i = 1; i <= 10; i++) {
+                    for (let j = 1; j <= 10; j++) pool.push({ q: `${i} × ${j}`, a: i * j, type: 'mul' });
+                }
+            }
+
+            if (state.rapid.order === 'random') {
+                shuffleArray(pool);
+                state.rapid.questionsPool = [...pool, ...pool, ...pool, ...pool, ...pool]; 
+                shuffleArray(state.rapid.questionsPool);
+            } else {
+                let orderedPool = [];
+                if (add) orderedPool = orderedPool.concat(pool.filter(p => p.type === 'add'));
+                if (sub) orderedPool = orderedPool.concat(pool.filter(p => p.type === 'sub'));
+                if (mul) orderedPool = orderedPool.concat(pool.filter(p => p.type === 'mul'));
+                state.rapid.questionsPool = [...orderedPool, ...orderedPool, ...orderedPool, ...orderedPool];
+            }
+
+            state.rapid.currentQIndex = 0;
+            state.rapid.totalAnswered = 0;
+            state.rapid.correctCount = 0;
+            state.rapid.errors = [];
+            
+            updateRapidTimerUI();
+            showNextRapidQuestion();
+            navigate('rapid-game');
+
+            clearInterval(state.rapid.timerId);
+            state.rapid.timerId = setInterval(() => {
+                state.rapid.timeLeft--;
+                updateRapidTimerUI();
+                if (state.rapid.timeLeft <= 0) {
+                    endRapidGame(false);
+                }
+            }, 1000);
+        }
+
+        function updateRapidTimerUI() {
+            const m = String(Math.floor(state.rapid.timeLeft / 60)).padStart(2, '0');
+            const s = String(state.rapid.timeLeft % 60).padStart(2, '0');
+            const timerEl = document.getElementById('rapid-timer-display');
+            timerEl.textContent = `${m}:${s}`;
+            
+            if (state.rapid.timeLeft <= 10) {
+                timerEl.classList.add('text-iosRed');
+                timerEl.classList.remove('text-iosText');
+            } else {
+                timerEl.classList.remove('text-iosRed');
+                timerEl.classList.add('text-iosText');
+            }
+        }
+
+        function showNextRapidQuestion() {
+            if (state.rapid.currentQIndex >= state.rapid.questionsPool.length) {
+                state.rapid.currentQIndex = 0; 
+            }
+            const q = state.rapid.questionsPool[state.rapid.currentQIndex];
+            document.getElementById('rapid-question').textContent = q.q;
+            
+            const input = document.getElementById('rapid-input');
+            input.value = '';
+        }
+
+        function handleRapidSubmit(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById('rapid-input');
+            const val = parseInt(inputEl.value, 10);
+            if (isNaN(val)) return;
+
+            const q = state.rapid.questionsPool[state.rapid.currentQIndex];
+            state.rapid.totalAnswered++;
+            
+            if (val === q.a) {
+                state.rapid.correctCount++;
+            } else {
+                state.rapid.errors.push({ q: q.q, user: val, correct: q.a });
+            }
+
+            state.rapid.currentQIndex++;
+            showNextRapidQuestion();
+        }
+
+        function endRapidGame(manual = false) {
+            clearInterval(state.rapid.timerId);
+            
+            document.getElementById('res-total').textContent = state.rapid.totalAnswered;
+            document.getElementById('res-correct').textContent = state.rapid.correctCount;
+            document.getElementById('res-errors').textContent = state.rapid.errors.length;
+            
+            let perc = 0;
+            if (state.rapid.totalAnswered > 0) {
+                perc = Math.round((state.rapid.correctCount / state.rapid.totalAnswered) * 100);
+            }
+            document.getElementById('res-percentage').textContent = `${perc}%`;
+
+            const errCont = document.getElementById('errors-container');
+            const errList = document.getElementById('errors-list');
+            errList.innerHTML = '';
+
+            if (state.rapid.errors.length > 0) {
+                errCont.classList.remove('hidden');
+                state.rapid.errors.forEach(err => {
+                    const li = document.createElement('li');
+                    li.className = "py-4 px-4 flex justify-between items-center text-xl";
+                    li.innerHTML = `
+                        <span class="font-extrabold">${err.q} = </span>
+                        <div class="flex items-center space-x-5">
+                            <span class="text-iosRed line-through font-bold">${err.user}</span>
+                            <span class="text-iosGreen font-black">${err.correct}</span>
+                        </div>
+                    `;
+                    errList.appendChild(li);
+                });
+            } else {
+                errCont.classList.add('hidden');
+            }
+
+            navigate('rapid-results');
+        }
+
+        function startTaulesGame() {
+            if (state.taules.selected.size === 0) {
+                alert("Si us plau, tria almenys una taula.");
+                return;
+            }
+
+            let maxQ = parseInt(document.getElementById('taules-count').value) || 10;
+            
+            let pool = [];
+            state.taules.selected.forEach(t => {
+                for (let i = 1; i <= 10; i++) {
+                    pool.push({ q: `${t} × ${i}`, a: t * i, t: t, i: i });
+                }
+            });
+
+            if (state.taules.order === 'random') {
+                shuffleArray(pool);
+            } else {
+                pool.sort((a, b) => {
+                    if (a.t !== b.t) return a.t - b.t;
+                    return a.i - b.i;
+                });
+            }
+
+            state.taules.questionsPool = pool.slice(0, maxQ);
+            state.taules.maxQuestions = state.taules.questionsPool.length;
+            state.taules.currentQIndex = 0;
+            state.taules.lives = 3;
+            state.taules.correctCount = 0;
+
+            updateLivesUI();
+            showNextTaulesQuestion();
+            navigate('taules-game');
+        }
+
+        function updateLivesUI() {
+            const hearts = document.querySelectorAll('#hearts-container .heart');
+            hearts.forEach((h, idx) => {
+                if (idx < state.taules.lives) {
+                    h.classList.add('filled');
+                } else {
+                    if (h.classList.contains('filled')) {
+                        h.classList.remove('filled');
+                        h.classList.add('pop');
+                        setTimeout(() => h.classList.remove('pop'), 300);
+                    }
+                }
+            });
+        }
+
+        function showNextTaulesQuestion() {
+            document.getElementById('taules-progress').textContent = `${state.taules.currentQIndex + 1}/${state.taules.maxQuestions}`;
+            const q = state.taules.questionsPool[state.taules.currentQIndex];
+            document.getElementById('taules-question').textContent = q.q;
+            
+            const input = document.getElementById('taules-input');
+            input.value = '';
+            input.style.color = 'var(--ios-text)';
+            
+            const feedback = document.getElementById('taules-feedback');
+            feedback.style.opacity = '0';
+        }
+
+        function handleTaulesSubmit(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById('taules-input');
+            const val = parseInt(inputEl.value, 10);
+            if (isNaN(val)) return;
+
+            const q = state.taules.questionsPool[state.taules.currentQIndex];
+            const card = document.getElementById('taules-card');
+            const feedback = document.getElementById('taules-feedback');
+
+            if (val === q.a) {
+                state.taules.correctCount++;
+                inputEl.style.color = 'var(--ios-green)';
+                
+                setTimeout(() => {
+                    state.taules.currentQIndex++;
+                    if (state.taules.currentQIndex >= state.taules.maxQuestions) {
+                        endTaulesGame(true);
+                    } else {
+                        showNextTaulesQuestion();
+                    }
+                }, 400);
+
+            } else {
+                state.taules.lives--;
+                updateLivesUI();
+                
+                card.classList.remove('error-shake');
+                void card.offsetWidth; 
+                card.classList.add('error-shake');
+                
+                feedback.textContent = `Era ${q.a}`;
+                feedback.style.opacity = '1';
+
+                if (state.taules.lives <= 0) {
+                    setTimeout(() => endTaulesGame(false), 1500);
+                } else {
+                    setTimeout(() => {
+                        inputEl.value = '';
+                        feedback.style.opacity = '0';
+                    }, 1500);
+                }
+            }
+        }
+
+        function endTaulesGame(won) {
+            const icon = document.getElementById('taules-res-icon');
+            const title = document.getElementById('taules-res-title');
+            const desc = document.getElementById('taules-res-desc');
+            
+            document.getElementById('taules-res-score').textContent = state.taules.correctCount;
+
+            if (won) {
+                icon.textContent = '🏆';
+                title.textContent = 'Molt bé, Arnau!';
+                title.className = 'text-4xl font-extrabold mb-3 text-[var(--ios-green)] tracking-tight';
+                desc.textContent = "Has completat totes les operacions.";
+            } else {
+                icon.textContent = '💔';
+                title.textContent = 'Game Over';
+                title.className = 'text-4xl font-extrabold mb-3 text-[var(--ios-red)] tracking-tight';
+                desc.textContent = "T'has quedat sense vides. Torna-ho a intentar!";
+            }
+            
+            navigate('taules-results');
+        }
+
+    </script>
+</body>
+</html>
