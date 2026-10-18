@@ -1,1019 +1,1237 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Les mates d'Arnau</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        iosBg: 'var(--ios-bg)',
-                        iosCard: 'var(--ios-card)',
-                        iosText: 'var(--ios-text)',
-                        iosTextSec: 'var(--ios-text-secondary)',
-                        iosBorder: 'var(--ios-border)',
-                        iosBlue: 'var(--ios-blue)',
-                        iosGreen: 'var(--ios-green)',
-                        iosRed: 'var(--ios-red)'
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --ios-bg: #F2F2F7;
-            --ios-card: #FFFFFF;
-            --ios-blue: #007AFF;
-            --ios-blue-active: #005bb5;
-            --ios-green: #34C759;
-            --ios-red: #FF3B30;
-            --ios-text: #000000;
-            --ios-text-secondary: #8E8E93;
-            --ios-border: #C6C6C8;
-            --ios-segment-bg: #E5E5EA;
-            --ios-segment-active: #FFFFFF;
-            --numpad-bg: #D1D1D6;
-            --numpad-btn: #FFFFFF;
-            --numpad-btn-active: #B5B5B9;
-            --numpad-special: #ACB1B9;
-            --numpad-text: #000000;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>The Legend of Arnau: Les Mates del Regne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Quicksand:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #e8c368;
+    --gold-bright: #fff3b0;
+    --gold-dark: #9e731c;
+    --sheikah-blue: #00e1ff;
+    --zonai-green: #00ffa6;
+    --gloom-red: #ff1e4e;
+    --bg-dark: #060a0e;
+    --panel-bg: rgba(11, 20, 29, 0.92);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+  body, html {
+    width: 100%; height: 100%; overflow: hidden;
+    background-color: var(--bg-dark);
+    font-family: 'Quicksand', 'Segoe UI', sans-serif;
+    color: #fff;
+    touch-action: manipulation;
+  }
+  #game-container {
+    position: relative; width: 100%; height: 100%;
+    max-width: 920px; margin: 0 auto;
+    display: flex; flex-direction: column;
+    background: #05080b;
+    box-shadow: 0 0 60px rgba(0, 255, 166, 0.14);
+    border-left: 1px solid rgba(232, 195, 104, 0.2);
+    border-right: 1px solid rgba(232, 195, 104, 0.2);
+  }
+  canvas {
+    width: 100%; height: 48%; min-height: 210px;
+    display: block;
+    border-bottom: 3px solid var(--gold);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.8);
+    z-index: 2;
+  }
+  /* HUD SUPERIOR */
+  #hud {
+    position: absolute; top: 0; left: 0; width: 100%;
+    padding: 10px 14px; display: flex; justify-content: space-between; align-items: flex-start;
+    pointer-events: none; z-index: 10;
+    background: linear-gradient(180deg, rgba(4,8,12,0.85) 0%, rgba(4,8,12,0.3) 70%, transparent 100%);
+  }
+  .hud-left, .hud-right { display: flex; flex-direction: column; gap: 5px; }
+  .hearts-container { display: flex; gap: 3px; flex-wrap: wrap; max-width: 230px; }
+  .heart {
+    font-size: 19px;
+    filter: drop-shadow(0 0 5px rgba(255, 30, 78, 0.85));
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .heart.empty { opacity: 0.22; filter: grayscale(1); transform: scale(0.85); }
+  .stat-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(8, 15, 22, 0.8);
+    border: 1px solid rgba(232, 195, 104, 0.65);
+    backdrop-filter: blur(6px);
+    padding: 3px 10px; border-radius: 20px; font-weight: 800; font-size: 12px;
+    color: var(--gold-bright); pointer-events: auto;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5), inset 0 0 8px rgba(232,195,104,0.12);
+  }
+  .rupee-icon {
+    width: 10px; height: 16px; background: linear-gradient(135deg, #80ffdb, #00ffa6);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    box-shadow: 0 0 10px var(--zonai-green);
+  }
 
-        .dark {
-            --ios-bg: #000000;
-            --ios-card: #1C1C1E;
-            --ios-blue: #0A84FF;
-            --ios-blue-active: #0070df;
-            --ios-green: #30D158;
-            --ios-red: #FF453A;
-            --ios-text: #FFFFFF;
-            --ios-text-secondary: #8E8E93;
-            --ios-border: #38383A;
-            --ios-segment-bg: #2C2C2E;
-            --ios-segment-active: #636366;
-            --numpad-bg: #2C2C2E;
-            --numpad-btn: #48484A;
-            --numpad-btn-active: #3A3A3C;
-            --numpad-special: #3A3A3C;
-            --numpad-text: #FFFFFF;
-        }
+  /* PANEL DE CONTROL / TABLETA */
+  #control-panel {
+    flex: 1; display: flex; flex-direction: column; justify-content: space-between;
+    padding: 10px 14px;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(0, 225, 255, 0.12) 0%, transparent 65%),
+      linear-gradient(180deg, #0c1722 0%, #060b10 100%);
+    position: relative; min-height: 0; z-index: 3;
+  }
+  #question-box {
+    text-align: center; background: var(--panel-bg);
+    border: 1.5px solid rgba(0, 225, 255, 0.6);
+    border-radius: 12px; padding: 6px 12px; position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 225, 255, 0.15), inset 0 0 18px rgba(0, 225, 255, 0.08);
+  }
+  #monster-name {
+    font-family: 'Cinzel', serif; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 2px; color: var(--gold); margin-bottom: 1px; font-weight: 900;
+  }
+  #question-text {
+    font-size: 28px; font-weight: 800; color: #fff;
+    text-shadow: 0 0 14px var(--sheikah-blue), 0 0 28px rgba(0, 225, 255, 0.4);
+    letter-spacing: 2px; line-height: 1.1;
+  }
+  #timer-bar-bg {
+    width: 100%; height: 6px; background: rgba(255,255,255,0.1);
+    border-radius: 6px; margin-top: 5px; overflow: hidden;
+    border: 1px solid rgba(0, 225, 255, 0.25);
+  }
+  #timer-bar {
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, var(--zonai-green), var(--sheikah-blue));
+    box-shadow: 0 0 10px var(--zonai-green);
+  }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--ios-bg);
-            color: var(--ios-text);
-            overscroll-behavior-y: none;
-            -webkit-tap-highlight-color: transparent;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            min-height: 100dvh; /* Soporte dinámico para navegadores móviles */
-            transition: background-color 0.3s, color 0.3s;
-        }
+  /* RUNAS DE RESPUESTA */
+  #answers-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin: 8px 0; flex: 1; min-height: 100px;
+  }
+  .rune-btn {
+    background: linear-gradient(160deg, rgba(24, 43, 62, 0.92), rgba(11, 21, 32, 0.96));
+    border: 1.5px solid rgba(0, 225, 255, 0.45);
+    border-radius: 12px; color: #fff; font-size: 25px; font-weight: 800;
+    font-family: 'Quicksand', sans-serif;
+    cursor: pointer; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.2);
+    transition: transform 0.08s, border-color 0.15s, box-shadow 0.15s;
+  }
+  .rune-btn:active:not(:disabled) { transform: scale(0.96); }
+  .rune-btn:hover:not(:disabled) {
+    border-color: var(--sheikah-blue);
+    box-shadow: 0 0 18px rgba(0, 225, 255, 0.45);
+  }
+  .rune-btn.correct {
+    background: linear-gradient(145deg, #0d4831, #06261a) !important;
+    border-color: var(--zonai-green) !important;
+    box-shadow: 0 0 22px var(--zonai-green) !important;
+    color: #eafff6;
+  }
+  .rune-btn.wrong {
+    background: linear-gradient(145deg, #521022, #290710) !important;
+    border-color: var(--gloom-red) !important;
+    box-shadow: 0 0 22px var(--gloom-red) !important;
+  }
 
-        .ios-shadow {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
-        .dark .ios-shadow {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
+  /* BARRA INFERIOR */
+  #bottom-bar {
+    display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  }
+  .action-btn {
+    flex: 1; padding: 8px 6px; border-radius: 10px;
+    border: 1px solid rgba(232, 195, 104, 0.65);
+    background: linear-gradient(180deg, rgba(40, 34, 18, 0.75), rgba(20, 17, 10, 0.9));
+    color: var(--gold-bright);
+    font-family: 'Quicksand', sans-serif; font-weight: 800; font-size: 12px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+  }
+  .action-btn:active:not(:disabled) { transform: scale(0.96); }
+  .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .ios-card {
-            background-color: var(--ios-card);
-            border-radius: 24px;
-            padding: 24px;
-            margin-bottom: 20px;
-            width: 100%;
-            transition: background-color 0.3s;
-        }
+  /* VISTAS Y CONFIGURACIÓN */
+  .view {
+    display: none; animation: fadeIn 0.25s ease-out;
+    width: 100%; max-width: 650px; margin: 0 auto; flex-grow: 1;
+    padding: 16px 20px; box-sizing: border-box; overflow-y: auto;
+  }
+  .view.active { display: flex; flex-direction: column; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-        .ios-btn {
-            background-color: var(--ios-blue);
-            color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
-            border-radius: 16px;
-            padding: 16px 20px;
-            width: 100%;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.1s, background-color 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 56px;
-        }
-        .ios-btn:active {
-            transform: scale(0.97);
-            background-color: var(--ios-blue-active);
-        }
+  .ios-card {
+    background: rgba(18, 28, 40, 0.85);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px; padding: 20px; margin-bottom: 16px; width: 100%;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+  }
+  .ios-btn {
+    font-family: 'Cinzel', serif;
+    background: linear-gradient(135deg, #f3d47c 0%, #c6922c 50%, #9b6c15 100%);
+    color: #080c10; font-weight: 900; font-size: 17px;
+    padding: 14px 28px; border: 1px solid #fff3b0; border-radius: 30px;
+    cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 1px;
+    box-shadow: 0 4px 20px rgba(232, 195, 104, 0.45);
+  }
+  .ios-btn:active { transform: scale(0.97); }
 
-        .segmented-control {
-            display: flex;
-            background-color: var(--ios-segment-bg);
-            border-radius: 10px;
-            padding: 3px;
-            margin-bottom: 16px;
-            width: 100%;
-            transition: background-color 0.3s;
-        }
-        .segment {
-            flex: 1;
-            text-align: center;
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: var(--ios-text);
-            transition: background-color 0.2s, box-shadow 0.2s, color 0.3s;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .segment.active {
-            background-color: var(--ios-segment-active);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-        }
+  .ios-toggle {
+    position: relative; width: 50px; height: 28px; appearance: none;
+    background: #1a2938; border-radius: 14px; outline: none; cursor: pointer;
+    transition: background 0.3s; border: 1px solid rgba(255,255,255,0.1);
+  }
+  .ios-toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 22px; height: 22px;
+    background: #FFF; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    transition: transform 0.3s;
+  }
+  .ios-toggle:checked { background: var(--zonai-green); }
+  .ios-toggle:checked::after { transform: translateX(22px); }
 
-        .ios-toggle {
-            position: relative;
-            width: 50px;
-            height: 30px;
-            appearance: none;
-            background: var(--ios-segment-bg);
-            border-radius: 15px;
-            outline: none;
-            cursor: pointer;
-            transition: background 0.3s;
-            flex-shrink: 0;
-        }
-        .ios-toggle::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 26px;
-            height: 26px;
-            background: #FFF;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
-        }
-        .ios-toggle:checked {
-            background: var(--ios-green);
-        }
-        .ios-toggle:checked::after {
-            transform: translateX(20px);
-        }
+  .modal-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, rgba(14, 26, 38, 0.96) 0%, rgba(4, 8, 12, 0.98) 100%);
+    z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 20px; text-align: center; overflow-y: auto; backdrop-filter: blur(8px);
+  }
+  .hidden { display: none !important; }
+  .zelda-title {
+    font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 5px;
+    color: var(--zonai-green); text-transform: uppercase; margin-bottom: 4px; font-weight: 700;
+  }
+  .main-title {
+    font-family: 'Cinzel', serif; font-size: 27px; font-weight: 900; color: var(--gold);
+    text-shadow: 0 2px 18px rgba(232, 195, 104, 0.55); margin-bottom: 12px; letter-spacing: 1px;
+  }
+  .triforce {
+    width: 60px; height: 52px; margin: 0 auto 10px; position: relative; flex-shrink: 0;
+    animation: floatTri 3s ease-in-out infinite;
+  }
+  @keyframes floatTri {
+    0%, 100% { transform: translateY(0px); filter: drop-shadow(0 0 8px rgba(232,195,104,0.6)); }
+    50% { transform: translateY(-5px); filter: drop-shadow(0 0 16px rgba(255,243,176,0.95)); }
+  }
+  .tri {
+    width: 0; height: 0;
+    border-left: 15px solid transparent; border-right: 15px solid transparent;
+    border-bottom: 26px solid var(--gold); position: absolute;
+  }
+  .tri.top { left: 15px; top: 0; }
+  .tri.left { left: 0; top: 26px; }
+  .tri.right { left: 30px; top: 26px; }
 
-        .big-input {
-            width: 100%;
-            text-align: center;
-            font-size: 4rem; /* Reducido de 4.5rem */
-            font-weight: 800;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--ios-text);
-            padding: 5px 0; /* Reducido de 10px */
-            margin: 5px 0; /* Reducido de 10px */
-        }
-        .big-input::placeholder {
-            color: var(--ios-text-secondary);
-            opacity: 0.5;
-        }
-        
-        .time-input {
-            width: 70px;
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: 600;
-            border: 2px solid var(--ios-border);
-            border-radius: 12px;
-            padding: 12px 8px;
-            background: transparent;
-            color: var(--ios-text);
-            outline: none;
-            transition: border-color 0.2s, color 0.3s;
-        }
-        .time-input:focus {
-            border-color: var(--ios-blue);
-        }
+  .secondary-btn {
+    background: rgba(0, 225, 255, 0.08); border: 1px solid var(--sheikah-blue);
+    color: var(--sheikah-blue); padding: 8px 18px; border-radius: 20px;
+    font-size: 13px; font-weight: 700; cursor: pointer; margin: 4px;
+  }
 
-        .view {
-            display: none;
-            animation: fadeIn 0.3s ease-out;
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            flex-grow: 1;
-            padding: 10px 20px 20px 20px; /* Reducido el padding top */
-            box-sizing: border-box;
-        }
-        .view.active {
-            display: flex;
-            flex-direction: column;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .table-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .table-btn {
-            background: transparent;
-            border: 2px solid var(--ios-border);
-            border-radius: 14px;
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--ios-text);
-            cursor: pointer;
-            transition: all 0.2s;
-            user-select: none;
-        }
-        .table-btn.selected {
-            background: var(--ios-blue);
-            border-color: var(--ios-blue);
-            color: #FFF;
-        }
-
-        .heart {
-            font-size: 1.8rem;
-            color: var(--ios-border);
-            margin: 0 4px;
-            transition: color 0.3s, transform 0.2s;
-        }
-        .heart.filled { color: var(--ios-red); }
-        .heart.pop { animation: popHeart 0.3s ease; }
-        @keyframes popHeart {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.5); }
-            100% { transform: scale(1); }
-        }
-        
-        .error-shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
-        @keyframes shake {
-            10%, 90% { transform: translate3d(-2px, 0, 0); }
-            20%, 80% { transform: translate3d(4px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-            40%, 60% { transform: translate3d(6px, 0, 0); }
-        }
-
-        .numpad-container {
-            width: 100%;
-            max-width: 360px;
-            margin: 0 auto;
-            padding-top: 5px; /* Reducido de 10px */
-            padding-bottom: env(safe-area-inset-bottom); /* Protección inferior en iOS */
-        }
-        .numpad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px; /* Reducido de 10px */
-            padding: 10px; /* Reducido de 12px */
-            background: var(--numpad-bg);
-            border-radius: 16px;
-            transition: background-color 0.3s;
-        }
-        .numpad-btn {
-            background: var(--numpad-btn);
-            border: none;
-            border-radius: 10px;
-            font-size: 1.6rem; /* Reducido de 1.8rem */
-            font-weight: 500;
-            padding: 10px 0; /* Reducido de 12px */
-            box-shadow: 0 1px 0px rgba(0,0,0,0.3);
-            color: var(--numpad-text);
-            cursor: pointer;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            transition: background 0.1s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Inter', sans-serif;
-        }
-        .numpad-btn:active { background: var(--numpad-btn-active); }
-        .numpad-btn.special { background: var(--numpad-special); font-size: 1.4rem; color: var(--ios-text); }
-        .numpad-btn.special:active { background: var(--numpad-btn); }
-        .numpad-btn.enter { background: var(--ios-blue); color: white; font-weight: 600; font-size: 1.2rem; }
-        .numpad-btn.enter:active { background: var(--ios-blue-active); }
-    </style>
+  /* ARMERÍA */
+  .shop-list {
+    width: 100%; max-width: 450px; max-height: 50vh; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 8px; margin: 10px 0; padding-right: 4px;
+  }
+  .shop-item {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(15, 27, 40, 0.9); border: 1px solid #2a4055; padding: 10px 14px;
+    border-radius: 12px; text-align: left; gap: 10px;
+  }
+  .shop-item.equipped {
+    border-color: var(--zonai-green);
+    background: linear-gradient(90deg, rgba(0, 255, 166, 0.12), rgba(15, 27, 40, 0.9));
+  }
+  .shop-btn {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: #000; border: none; padding: 8px 12px;
+    border-radius: 8px; font-weight: 800; cursor: pointer; min-width: 90px; flex-shrink: 0;
+  }
+  .shop-btn:disabled { background: #23303d; color: #647687; cursor: not-allowed; }
+</style>
 </head>
 <body>
 
-    <button id="theme-toggle" class="fixed top-4 right-4 z-50 p-3 rounded-full bg-iosCard ios-shadow text-iosText active:scale-95 transition-transform" onclick="toggleTheme()">
-        <svg id="theme-icon-light" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-        <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-        </svg>
-    </button>
+<div id="game-container">
 
-    <div id="view-home" class="view active justify-center">
-        <h1 class="text-center font-extrabold text-4xl mb-8 pt-2 tracking-tight">Les mates d'Arnau</h1>
-        
-        <div class="ios-card ios-shadow cursor-pointer active:scale-95 transition-transform" onclick="navigate('rapid-config')">
-            <div class="flex items-center space-x-5">
-                <div class="bg-blue-100 dark:bg-blue-900 p-4 rounded-full text-blue-600 dark:text-blue-300 shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold">Càlcul Mental</h2>
-                    <p class="text-base text-iosTextSec mt-1 leading-snug">Suma, resta i multiplica a contrarellotge.</p>
-                </div>
-            </div>
+    <!-- VISTA 1: MENÚ PRINCIPAL -->
+    <div id="view-home" class="view active justify-center items-center text-center">
+        <div class="triforce">
+            <div class="tri top"></div>
+            <div class="tri left"></div>
+            <div class="tri right"></div>
         </div>
-
-        <div class="ios-card ios-shadow cursor-pointer active:scale-95 transition-transform" onclick="navigate('taules-config')">
-            <div class="flex items-center space-x-5">
-                <div class="bg-green-100 dark:bg-green-900 p-4 rounded-full text-green-600 dark:text-green-300 shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+        <div class="zelda-title">THE LEGEND OF ARNAU</div>
+        <h1 class="main-title text-4xl mb-6">Les Mates del Regne</h1>
+        <p class="text-sm text-gray-300 mb-8 max-w-sm">Escull la teva aventura matemàtica, enfronta't als monstres de Hyrule i supera els reptes!</p>
+        
+        <div class="ios-card cursor-pointer active:scale-95 transition-transform text-left" onclick="navigate('config')">
+            <div class="flex items-center space-x-4">
+                <div class="bg-blue-950 p-3.5 rounded-2xl text-cyan-400 border border-cyan-500/30 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                 </div>
                 <div>
-                    <h2 class="text-2xl font-bold">Taules de Multiplicar</h2>
-                    <p class="text-base text-iosTextSec mt-1 leading-snug">Practica amb vides. Sense pressa.</p>
+                    <h2 class="text-xl font-bold text-gold-bright">Aventura de Càlcul</h2>
+                    <p class="text-xs text-gray-300 mt-0.5">Sumes, restes i multiplicacions amb vides, rupias i armes.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="view-rapid-config" class="view">
-        <button onclick="navigate('home')" class="text-iosBlue font-semibold text-lg flex items-center mb-4 self-start active:opacity-70 p-2 -ml-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg> Enrere
+    <!-- VISTA 2: CONFIGURACIÓN DE OPERACIONES -->
+    <div id="view-config" class="view">
+        <button onclick="navigate('home')" class="text-cyan-400 font-semibold text-sm flex items-center mb-3 self-start active:opacity-70 p-1 -ml-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg> Enrere
         </button>
         
-        <h2 class="text-3xl font-bold mb-4">Configura el repte</h2>
+        <h2 class="main-title text-2xl mb-4">Configura l'Aventura</h2>
 
-        <div class="ios-card ios-shadow">
-            <h3 class="text-xs font-bold text-iosTextSec uppercase tracking-wider mb-2">Operacions</h3>
-            <div class="flex justify-between items-center py-3 border-b border-iosBorder">
-                <span class="font-semibold text-xl">Sumes (+)</span>
+        <div class="ios-card">
+            <h3 class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-3">Tipus d'Operacions</h3>
+            <div class="flex justify-between items-center py-2.5 border-b border-gray-800">
+                <span class="font-bold text-base">Sumes (+)</span>
                 <input type="checkbox" id="toggle-add" class="ios-toggle" checked>
             </div>
-            <div class="flex justify-between items-center py-3 border-b border-iosBorder">
-                <span class="font-semibold text-xl">Restes (-)</span>
-                <input type="checkbox" id="toggle-sub" class="ios-toggle">
+            <div class="flex justify-between items-center py-2.5 border-b border-gray-800">
+                <span class="font-bold text-base">Restes (-)</span>
+                <input type="checkbox" id="toggle-sub" class="ios-toggle" checked>
             </div>
-            <div class="flex justify-between items-center py-3">
-                <span class="font-semibold text-xl">Multiplicacions (×)</span>
-                <input type="checkbox" id="toggle-mul" class="ios-toggle">
+            <div class="flex justify-between items-center py-2.5">
+                <span class="font-bold text-base">Multiplicacions (×)</span>
+                <input type="checkbox" id="toggle-mul" class="ios-toggle" checked>
             </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row sm:space-x-4 w-full">
-            <div class="ios-card ios-shadow flex-1">
-                <h3 class="text-xs font-bold text-iosTextSec uppercase tracking-wider mb-3">Ordre</h3>
-                <div class="segmented-control" id="rapid-order-control">
-                    <div class="segment active" data-val="random">Aleatori</div>
-                    <div class="segment" data-val="linear">Lineal</div>
+        <button class="ios-btn mt-4" onclick="startGame()">⚔️ Començar l'Aventura</button>
+    </div>
+
+    <!-- VISTA 3: PANTALLA DE JUEGO (ZELDA BATTLE ENGINE) -->
+    <div id="view-game" class="view" style="padding: 0; max-width: 920px;">
+        <!-- HUD SUPERIOR -->
+        <div id="hud">
+            <div class="hud-left">
+                <div class="hearts-container" id="hearts-box"></div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <div class="stat-badge">🔥 Ratxa: <span id="streak-val">0</span></div>
+                    <div class="stat-badge">🏰 Nivell <span id="stage-val">1</span></div>
                 </div>
             </div>
-
-            <div class="ios-card ios-shadow flex-1">
-                <h3 class="text-xs font-bold text-iosTextSec uppercase tracking-wider mb-3">Temps</h3>
-                <div class="flex items-center justify-center space-x-3">
-                    <div class="flex flex-col items-center">
-                        <input type="number" id="rapid-min" class="time-input" value="2" min="0" max="60" inputmode="numeric" pattern="[0-9]*">
-                        <span class="text-xs text-iosTextSec mt-2 font-medium">Min</span>
+            <div class="hud-right" style="align-items: flex-end;">
+                <div style="display:flex; gap:6px;">
+                    <div class="stat-badge">
+                        <div class="rupee-icon"></div>
+                        <span id="rupees-val">0</span>
                     </div>
-                    <span class="text-3xl font-bold pb-6 text-iosTextSec">:</span>
-                    <div class="flex flex-col items-center">
-                        <input type="number" id="rapid-sec" class="time-input" value="0" min="0" max="59" inputmode="numeric" pattern="[0-9]*">
-                        <span class="text-xs text-iosTextSec mt-2 font-medium">Seg</span>
-                    </div>
+                    <button class="stat-badge" id="mute-btn" onclick="Sound.toggleMute()" style="cursor:pointer;">🔊</button>
                 </div>
+                <div class="stat-badge" id="weapon-badge">🪵 Rama de Árbol</div>
             </div>
         </div>
 
-        <button class="ios-btn mt-4 shadow-md text-xl py-4" onclick="startRapidGame()">Començar</button>
-    </div>
+        <!-- CANVAS DE COMBATE 60 FPS -->
+        <canvas id="battle-canvas" width="900" height="420"></canvas>
 
-    <div id="view-rapid-game" class="view">
-        <div class="flex justify-between items-center mb-2 pt-0">
-            <button onclick="endRapidGame(true)" class="text-iosRed font-semibold text-lg active:opacity-70 p-2 -ml-2">Acabar</button>
-            <div id="rapid-timer-display" class="text-4xl font-black tabular-nums tracking-wider text-iosText">02:00</div>
-            <div class="w-16"></div>
-        </div>
-
-        <div class="flex-grow flex flex-col justify-center items-center pb-2">
-            <div class="ios-card ios-shadow w-full max-w-sm text-center py-4 relative overflow-hidden mb-2">
-                <div id="rapid-question" class="text-6xl font-extrabold tracking-tighter mb-0 text-iosText">--</div>
-                
-                <form id="rapid-form" onsubmit="handleRapidSubmit(event)" class="w-full">
-                    <input type="text" id="rapid-input" class="big-input" placeholder="?" readonly required>
-                    <button type="submit" class="hidden">Submit</button>
-                </form>
+        <!-- PANEL DE PREGUNTA Y 4 OPCIONES TIPO TEST / RUNAS -->
+        <div id="control-panel">
+            <div id="question-box">
+                <div id="monster-name">BOKOBLIN CARMESÍ</div>
+                <div id="question-text">7 + 8 = ?</div>
+                <div id="timer-bar-bg"><div id="timer-bar"></div></div>
             </div>
-            
-            <div class="numpad-container">
-                <div class="numpad">
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('1')">1</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('2')">2</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('3')">3</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('4')">4</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('5')">5</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('6')">6</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('7')">7</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('8')">8</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('9')">9</button>
-                    <button type="button" class="numpad-btn special" onclick="typeNumpad('del')">⌫</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('0')">0</button>
-                    <button type="button" class="numpad-btn enter" onclick="submitNumpad()">Següent</button>
-                </div>
+
+            <div id="answers-grid">
+                <button class="rune-btn" onclick="Game.checkAnswer(0)">15</button>
+                <button class="rune-btn" onclick="Game.checkAnswer(1)">14</button>
+                <button class="rune-btn" onclick="Game.checkAnswer(2)">16</button>
+                <button class="rune-btn" onclick="Game.checkAnswer(3)">12</button>
+            </div>
+
+            <div id="bottom-bar">
+                <button class="action-btn" onclick="Game.openMenu()">🗺️ Menú</button>
+                <button class="action-btn" onclick="Game.usePotion()" id="potion-btn">🧚 Hada (<span id="potions-val">1</span>)</button>
+                <button class="action-btn" onclick="Game.openShop()">🛡️ Armeria</button>
             </div>
         </div>
     </div>
 
-    <div id="view-rapid-results" class="view">
-        <h2 class="text-4xl font-extrabold text-center mb-6 pt-4 text-iosText">Temps esgotat!</h2>
-        
-        <div class="ios-card ios-shadow text-center">
-            <div class="flex justify-around items-center my-4">
-                <div class="flex flex-col">
-                    <span class="text-5xl font-black text-iosBlue" id="res-total">0</span>
-                    <span class="text-xs text-iosTextSec font-bold uppercase mt-2">Total</span>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-5xl font-black text-iosGreen" id="res-correct">0</span>
-                    <span class="text-xs text-iosTextSec font-bold uppercase mt-2">Encerts</span>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-5xl font-black text-iosRed" id="res-errors">0</span>
-                    <span class="text-xs text-iosTextSec font-bold uppercase mt-2">Errades</span>
-                </div>
-            </div>
-            
-            <div class="mt-8 pt-6 border-t border-iosBorder">
-                <span class="text-6xl font-black text-iosText" id="res-percentage">0%</span>
-                <p class="text-sm text-iosTextSec font-bold uppercase mt-2">D'encert</p>
-            </div>
+    <!-- MODAL ARMERÍA -->
+    <div id="shop-modal" class="modal-overlay hidden">
+        <div class="zelda-title">MERCAT REAL DE HYRULE</div>
+        <div class="main-title">ARMERIA D'ARNAU</div>
+        <div class="stat-badge" style="font-size:15px; margin-bottom:6px;">
+            <div class="rupee-icon"></div> <span id="shop-rupees">0</span> Rupies disponibles
         </div>
-
-        <div id="errors-container" class="mt-4 hidden mb-8">
-            <h3 class="font-bold text-xl mb-4 px-2">A repassar:</h3>
-            <div class="ios-card ios-shadow p-0 overflow-hidden">
-                <ul id="errors-list" class="divide-y divide-iosBorder max-h-64 overflow-y-auto w-full">
-                </ul>
-            </div>
-        </div>
-
-        <div class="mt-auto pb-4">
-            <button class="ios-btn shadow-sm text-xl py-4" onclick="navigate('home')">Tornar al menú</button>
-        </div>
+        <div class="shop-list" id="shop-items"></div>
+        <button class="secondary-btn" style="margin-top:10px;" onclick="Game.closeShop()">Tornar al Combat</button>
     </div>
 
-    <div id="view-taules-config" class="view">
-        <button onclick="navigate('home')" class="text-iosBlue font-semibold text-lg flex items-center mb-4 self-start active:opacity-70 p-2 -ml-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg> Enrere
-        </button>
-        
-        <h2 class="text-3xl font-bold mb-4">Tria les Taules</h2>
-
-        <div class="ios-card ios-shadow">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xs font-bold text-iosTextSec uppercase tracking-wider">Taules a practicar</h3>
-                <button class="text-iosBlue text-sm font-bold active:opacity-70 p-2 -mr-2" onclick="toggleAllTables()">Totes / Cap</button>
-            </div>
-            <div class="table-grid" id="tables-grid">
-            </div>
-        </div>
-
-        <div class="flex flex-col sm:flex-row sm:space-x-4 w-full">
-            <div class="ios-card ios-shadow flex-1">
-                <h3 class="text-xs font-bold text-iosTextSec uppercase tracking-wider mb-3">Ordre</h3>
-                <div class="segmented-control" id="taules-order-control">
-                    <div class="segment active" data-val="linear">Lineal</div>
-                    <div class="segment" data-val="random">Aleatori</div>
-                </div>
-            </div>
-
-            <div class="ios-card ios-shadow flex-1 flex flex-row items-center justify-between sm:flex-col sm:justify-start">
-                <h3 class="text-xs font-bold text-iosTextSec uppercase tracking-wider sm:mb-3">Preguntes</h3>
-                <input type="number" id="taules-count" class="time-input" value="10" min="1" max="100" inputmode="numeric" pattern="[0-9]*">
-            </div>
-        </div>
-
-        <button class="ios-btn mt-4 shadow-md text-xl py-4" onclick="startTaulesGame()">Jugar</button>
+    <!-- MODAL GAME OVER -->
+    <div id="gameover-modal" class="modal-overlay hidden">
+        <div class="main-title" style="color: var(--gloom-red); font-size:32px;">FI DE LA PARTIDA</div>
+        <p style="color:#ccc; max-width:340px; margin-bottom:16px; font-size:13px;">
+            Els monstres han guanyat aquesta batalla, però les Rupies, el Nivell i les Armes d'Arnau segueixen guardades!
+        </p>
+        <button class="ios-btn" style="max-width: 260px; margin: 0 auto;" onclick="Game.startBattle(true)">🔄 Reintentar Nivell</button>
+        <button class="secondary-btn" style="margin-top:12px;" onclick="Game.openMenu()">Anar al Menú</button>
     </div>
+</div>
 
-    <div id="view-taules-game" class="view">
-        <div class="flex justify-between items-center mb-2 pt-0">
-            <button onclick="endTaulesGame(false)" class="text-iosTextSec font-semibold text-lg active:opacity-70 p-2 -ml-2">Sortir</button>
-            <div class="flex space-x-1" id="hearts-container">
-                <span class="heart filled">♥</span>
-                <span class="heart filled">♥</span>
-                <span class="heart filled">♥</span>
-            </div>
-            <div id="taules-progress" class="text-base font-bold text-iosTextSec w-16 text-right">1/10</div>
-        </div>
+<script>
+/* ==========================================================
+   POLYFILL CANVAS ROUNDRECT
+   ========================================================== */
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    this.moveTo(x + r, y);
+    this.arcTo(x + w, y, x + w, y + h, r);
+    this.arcTo(x + w, y + h, x, y + h, r);
+    this.arcTo(x, y + h, x, y, r);
+    this.arcTo(x, y, x + w, y, r);
+    this.closePath();
+    return this;
+  };
+}
 
-        <div class="flex-grow flex flex-col justify-center items-center pb-2">
-            <div id="taules-card" class="ios-card ios-shadow w-full max-w-sm text-center py-4 transition-colors duration-300 mb-2">
-                <div id="taules-question" class="text-6xl font-extrabold tracking-tighter mb-0 text-iosText">--</div>
-                
-                <form id="taules-form" onsubmit="handleTaulesSubmit(event)" class="w-full">
-                    <input type="text" id="taules-input" class="big-input" placeholder="?" readonly required>
-                    <button type="submit" class="hidden">Submit</button>
-                </form>
-                
-                <div id="taules-feedback" class="h-6 mt-1 text-xl font-bold text-iosRed opacity-0 transition-opacity">Error!</div>
-            </div>
+/* ==========================================================
+   SINTETIZADOR DE AUDIO WEB API
+   ========================================================== */
+const Sound = {
+  ctx: null,
+  muted: false,
+  init() {
+    if (this.muted) return;
+    try {
+      if (!this.ctx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) this.ctx = new AudioCtx();
+      }
+      if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    } catch (e) {}
+  },
+  toggleMute() {
+    this.muted = !this.muted;
+    document.getElementById('mute-btn').textContent = this.muted ? '🔇' : '🔊';
+  },
+  playTone(freq, type, duration, delay = 0, vol = 0.15) {
+    if (this.muted || !this.ctx) return;
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime + delay);
+      gain.gain.setValueAtTime(vol, this.ctx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + delay + duration);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(this.ctx.currentTime + delay);
+      osc.stop(this.ctx.currentTime + delay + duration);
+    } catch (e) {}
+  },
+  swordSlash() {
+    this.init();
+    this.playTone(540, 'sawtooth', 0.11, 0, 0.2);
+    this.playTone(920, 'triangle', 0.16, 0.04, 0.25);
+  },
+  criticalHit() {
+    this.init();
+    [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => this.playTone(f, 'square', 0.14, i * 0.035, 0.18));
+  },
+  secretUnlocked() {
+    this.init();
+    const notes = [392, 369.99, 311.13, 220, 207.65, 329.63, 415.30, 523.25];
+    notes.forEach((n, i) => this.playTone(n, 'triangle', 0.18, i * 0.11, 0.22));
+  },
+  hurt() {
+    this.init();
+    this.playTone(150, 'sawtooth', 0.25, 0, 0.25);
+    this.playTone(105, 'sawtooth', 0.3, 0.1, 0.25);
+  },
+  rupee() {
+    this.init();
+    this.playTone(987.77, 'sine', 0.08, 0, 0.15);
+    this.playTone(1318.51, 'sine', 0.2, 0.07, 0.15);
+  }
+};
 
-            <div class="numpad-container">
-                <div class="numpad">
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('1')">1</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('2')">2</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('3')">3</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('4')">4</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('5')">5</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('6')">6</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('7')">7</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('8')">8</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('9')">9</button>
-                    <button type="button" class="numpad-btn special" onclick="typeNumpad('del')">⌫</button>
-                    <button type="button" class="numpad-btn" onclick="typeNumpad('0')">0</button>
-                    <button type="button" class="numpad-btn enter" onclick="submitNumpad()">OK</button>
-                </div>
-            </div>
-        </div>
-    </div>
+/* ==========================================================
+   DATOS DE ARMAS Y MONSTRUOS
+   ========================================================== */
+const WEAPONS = [
+  { id: 'stick', name: 'Rama de Árbol', dmg: 12, price: 0, color: '#b08354', glow: '#d7a978', icon: '🪵' },
+  { id: 'traveler', name: 'Espada de Viajero', dmg: 20, price: 60, color: '#dce4ec', glow: '#00e1ff', icon: '🗡️' },
+  { id: 'soldier', name: 'Mandoble Real', dmg: 30, price: 150, color: '#e8c368', glow: '#fff3b0', icon: '⚔️' },
+  { id: 'zonai', name: 'Espada Zonan', dmg: 45, price: 300, color: '#00ffa6', glow: '#00ffa6', icon: '❇️' },
+  { id: 'master', name: 'Espada Maestra', dmg: 65, price: 600, color: '#6ee7ff', glow: '#00e1ff', icon: '💠' }
+];
 
-    <div id="view-taules-results" class="view justify-center items-center">
-        <div class="ios-card ios-shadow w-full max-w-sm text-center py-12">
-            <div id="taules-res-icon" class="text-8xl mb-6 drop-shadow-md">🏆</div>
-            <h2 id="taules-res-title" class="text-4xl font-extrabold mb-3 text-iosGreen tracking-tight">Molt bé!</h2>
-            <p id="taules-res-desc" class="text-iosTextSec mb-8 font-medium text-lg leading-snug">Has completat la missió amb èxit.</p>
-            
-            <div class="text-center mb-10">
-                <span class="text-sm text-iosTextSec font-bold uppercase tracking-wider block mb-2">Encerts</span>
-                <span class="text-7xl font-black" id="taules-res-score">0</span>
-            </div>
-            
-            <button class="ios-btn w-full text-xl py-4" onclick="navigate('home')">Tornar al menú</button>
-        </div>
-    </div>
+const MONSTERS = [
+  { name: 'Chuchu Eléctrico', color: '#00d8ff', core: '#b8f7ff', eyeColor: '#fff', hpBase: 30, reward: 10, type: 'slime' },
+  { name: 'Bokoblin Carmesí', color: '#d92b4b', core: '#8c162c', eyeColor: '#ffbe0b', hpBase: 50, reward: 16, type: 'goblin' },
+  { name: 'Moblin de las Sombras', color: '#3b5bdb', core: '#1d3557', eyeColor: '#ff006e', hpBase: 80, reward: 25, type: 'moblin' },
+  { name: 'Gólem Cúbico Zonan', color: '#2b5848', core: '#00ffa6', eyeColor: '#00ffa6', hpBase: 120, reward: 38, type: 'golem' },
+  { name: 'JEFE: Centaleón Plateado', color: '#d8e2ec', core: '#ff1e4e', eyeColor: '#ff1e4e', hpBase: 200, reward: 90, type: 'boss' }
+];
 
-    <script>
-        function toggleTheme() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
+/* ==========================================================
+   MOTOR DEL JUEGO
+   ========================================================== */
+const Game = {
+  state: {
+    rupees: 0,
+    maxHearts: 5,
+    hearts: 5,
+    potions: 1,
+    stage: 1,
+    streak: 0,
+    allowAdd: true,
+    allowSub: true,
+    allowMul: true,
+    ownedWeapons: ['stick'],
+    equippedWeapon: 'stick',
+    mistakesQueue: []
+  },
+
+  battle: {
+    active: false,
+    inProgress: false,
+    pendingTimeout: null,
+    currentQ: { q: '2+2', ans: 4, options: [] },
+    timer: 100,
+    maxTime: 10,
+    lastTick: 0,
+    monster: null,
+    heroAnim: { x: 200, attackOffset: 0, hurtFlash: 0, swingTime: 0 },
+    monsterAnim: { x: 680, hitShake: 0, attackOffset: 0 },
+    particles: [],
+    slashes: [],
+    shockwaves: [],
+    floatingTexts: [],
+    screenShake: 0,
+    stars: [],
+    grassBlades: [],
+    skyIslands: [
+      { x: 170, y: 80, w: 90, h: 22, phase: 0 },
+      { x: 470, y: 60, w: 120, h: 28, phase: 2.1 },
+      { x: 760, y: 100, w: 70, h: 18, phase: 4.2 }
+    ]
+  },
+
+  init() {
+    this.loadSave();
+    this.canvas = document.getElementById('battle-canvas');
+    this.ctx = this.canvas.getContext('2d');
+
+    for (let i = 0; i < 50; i++) {
+      this.battle.stars.push({
+        x: Math.random() * 900,
+        y: Math.random() * 320,
+        r: Math.random() * 2 + 0.5,
+        speed: Math.random() * 0.3 + 0.05,
+        twinkle: Math.random() * Math.PI * 2,
+        isZonai: Math.random() > 0.6
+      });
+    }
+
+    for (let i = 0; i < 90; i++) {
+      this.battle.grassBlades.push({
+        x: i * 10 + (Math.random() * 4 - 2),
+        h: 12 + Math.random() * 16,
+      });
+    }
+
+    this.updateHUD();
+    this.battle.lastTick = performance.now();
+    requestAnimationFrame((t) => this.loop(t));
+  },
+
+  clearPendingTimeout() {
+    if (this.battle.pendingTimeout) {
+      clearTimeout(this.battle.pendingTimeout);
+      this.battle.pendingTimeout = null;
+    }
+  },
+
+  scheduleNext(fn, delay) {
+    this.clearPendingTimeout();
+    this.battle.pendingTimeout = setTimeout(() => {
+      this.battle.pendingTimeout = null;
+      fn();
+    }, delay);
+  },
+
+  loadSave() {
+    try {
+      const saved = localStorage.getItem('zelda_arnau_arithmetic_v1');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        this.state = { ...this.state, ...parsed };
+      }
+    } catch (e) {}
+  },
+
+  saveGame() {
+    try {
+      localStorage.setItem('zelda_arnau_arithmetic_v1', JSON.stringify(this.state));
+    } catch (e) {}
+  },
+
+  openMenu() {
+    this.clearPendingTimeout();
+    this.battle.active = false;
+    document.getElementById('gameover-modal').classList.add('hidden');
+    document.getElementById('shop-modal').classList.add('hidden');
+    document.getElementById('view-game').classList.remove('active');
+    document.getElementById('view-home').classList.add('active');
+  },
+
+  startBattle(isRetry = false) {
+    this.clearPendingTimeout();
+    Sound.init();
+    Sound.swordSlash();
+    document.getElementById('gameover-modal').classList.add('hidden');
+    document.getElementById('shop-modal').classList.add('hidden');
+    document.getElementById('view-home').classList.remove('active');
+    document.getElementById('view-config').classList.remove('active');
+    document.getElementById('view-game').classList.add('active');
+
+    if (isRetry || this.state.hearts <= 0 || !this.battle.inProgress) {
+      this.state.hearts = this.state.maxHearts;
+      this.spawnMonster();
+    }
+    this.battle.inProgress = true;
+    this.nextQuestion();
+    this.updateHUD();
+    this.battle.active = true;
+    this.battle.lastTick = performance.now();
+  },
+
+  spawnMonster() {
+    const isBoss = (this.state.stage % 5 === 0);
+    const index = isBoss ? 4 : Math.min(3, Math.floor((this.state.stage - 1) / 2));
+    const template = MONSTERS[index];
+    const hp = Math.round(template.hpBase * (1 + (this.state.stage - 1) * 0.18));
+    this.battle.monster = { ...template, maxHp: hp, hp: hp };
+    this.updateMonsterHeader();
+  },
+
+  updateMonsterHeader() {
+    if (!this.battle.monster) return;
+    const isBoss = (this.state.stage % 5 === 0);
+    document.getElementById('monster-name').textContent =
+      (isBoss ? '🌕 LUNA CARMESÍ • ' : '') + `${this.battle.monster.name} (HP: ${this.battle.monster.hp}/${this.battle.monster.maxHp})`;
+  },
+
+  nextQuestion() {
+    // Escoger tipo de operación activa aleatoriamente
+    let ops = [];
+    if (this.state.allowAdd) ops.push('+');
+    if (this.state.allowSub) ops.push('-');
+    if (this.state.allowMul) ops.push('×');
+    if (ops.length === 0) ops = ['+']; // fallback
+
+    const op = ops[Math.floor(Math.random() * ops.length)];
+    let a, b, ans, qText;
+
+    if (op === '+') {
+      a = Math.floor(Math.random() * 40) + 2;
+      b = Math.floor(Math.random() * 40) + 2;
+      ans = a + b;
+      qText = `${a} + ${b}`;
+    } else if (op === '-') {
+      a = Math.floor(Math.random() * 40) + 5;
+      b = Math.floor(Math.random() * a) + 1; // Asegurar positivo
+      ans = a - b;
+      qText = `${a} - ${b}`;
+    } else {
+      // Multiplicaciones hasta el 12
+      a = Math.floor(Math.random() * 11) + 2;
+      b = Math.floor(Math.random() * 11) + 2;
+      ans = a * b;
+      qText = `${a} × ${b}`;
+    }
+
+    const options = new Set([ans]);
+    while (options.size < 4) {
+      let offset = Math.floor(Math.random() * 9) - 4;
+      if (offset === 0) offset = 1;
+      let fake = ans + offset;
+      if (fake >= 0 && fake !== ans) options.add(fake);
+    }
+
+    const shuffled = Array.from(options).sort(() => Math.random() - 0.5);
+    this.battle.currentQ = { q: qText, ans, options: shuffled };
+    this.battle.timer = 100;
+    document.getElementById('timer-bar').style.width = '100%';
+    document.getElementById('question-text').textContent = `${qText} = ?`;
+
+    const btns = document.querySelectorAll('.rune-btn');
+    btns.forEach((btn, idx) => {
+      btn.className = 'rune-btn';
+      btn.textContent = shuffled[idx];
+      btn.disabled = false;
+    });
+  },
+
+  checkAnswer(idx) {
+    if (!this.battle.active) return;
+    const chosen = this.battle.currentQ.options[idx];
+    const correct = this.battle.currentQ.ans;
+    const btns = document.querySelectorAll('.rune-btn');
+    btns.forEach(b => b.disabled = true);
+
+    if (chosen === correct) {
+      btns[idx].classList.add('correct');
+      this.onCorrectHit();
+    } else {
+      btns[idx].classList.add('wrong');
+      btns.forEach(b => {
+        if (parseInt(b.textContent) === correct) b.classList.add('correct');
+      });
+      this.onMonsterAttack();
+    }
+  },
+
+  onCorrectHit() {
+    this.battle.active = false;
+    this.state.streak++;
+
+    const weapon = WEAPONS.find(w => w.id === this.state.equippedWeapon) || WEAPONS[0];
+    const isCrit = this.battle.timer > 65;
+    const streakBonus = Math.min(25, this.state.streak * 2);
+    const totalDmg = Math.round((weapon.dmg + streakBonus) * (isCrit ? 1.5 : 1));
+
+    if (isCrit) {
+      Sound.criticalHit();
+      this.spawnFloatingText('⚡ ¡CRÍTIC! -' + totalDmg, 630, 140, '#00ffa6');
+    } else {
+      Sound.swordSlash();
+      this.spawnFloatingText('-' + totalDmg, 660, 155, '#ffffff');
+    }
+
+    this.battle.heroAnim.attackOffset = 290;
+    this.battle.heroAnim.swingTime = 1.0;
+    this.battle.monsterAnim.hitShake = 18;
+    this.battle.screenShake = isCrit ? 12 : 6;
+
+    this.spawnSlash(650, 250, weapon.glow, isCrit);
+    this.spawnShockwave(660, 250, weapon.glow, isCrit ? 90 : 55);
+    this.spawnParticles(660, 250, weapon.glow, isCrit ? 38 : 20);
+
+    this.battle.monster.hp = Math.max(0, this.battle.monster.hp - totalDmg);
+    this.updateMonsterHeader();
+
+    if (this.battle.monster.hp <= 0) {
+      const reward = this.battle.monster.reward + Math.floor(this.state.streak * 1.5);
+      this.state.rupees += reward;
+      this.state.stage++;
+      Sound.secretUnlocked();
+      this.spawnShockwave(660, 250, '#e8c368', 120);
+      this.spawnParticles(660, 240, '#e8c368', 50);
+      this.spawnFloatingText(`💎 +${reward} RUPIES`, 640, 105, '#ffe680');
+      this.saveGame();
+      this.updateHUD();
+
+      this.scheduleNext(() => {
+        this.spawnMonster();
+        this.nextQuestion();
+        this.battle.active = true;
+        this.battle.lastTick = performance.now();
+      }, 950);
+    } else {
+      this.saveGame();
+      this.updateHUD();
+      this.scheduleNext(() => {
+        this.nextQuestion();
+        this.battle.active = true;
+        this.battle.lastTick = performance.now();
+      }, 450);
+    }
+  },
+
+  onMonsterAttack() {
+    this.battle.active = false;
+    this.state.streak = 0;
+    this.state.hearts = Math.max(0, this.state.hearts - 1);
+    Sound.hurt();
+
+    this.battle.monsterAnim.attackOffset = -260;
+    this.battle.heroAnim.hurtFlash = 16;
+    this.battle.screenShake = 14;
+    this.spawnShockwave(200, 265, '#ff1e4e', 75);
+    this.spawnParticles(200, 265, '#ff1e4e', 25);
+    this.spawnFloatingText(`¡${this.battle.currentQ.q} = ${this.battle.currentQ.ans}!`, 260, 135, '#ffbe0b');
+
+    this.updateHUD();
+    this.saveGame();
+
+    this.scheduleNext(() => {
+      if (this.state.hearts <= 0) {
+        this.battle.inProgress = false;
+        document.getElementById('gameover-modal').classList.remove('hidden');
+      } else {
+        this.nextQuestion();
+        this.battle.active = true;
+        this.battle.lastTick = performance.now();
+      }
+    }, 1300);
+  },
+
+  usePotion() {
+    if (!this.battle.active) return;
+    if (this.state.potions > 0 && this.state.hearts < this.state.maxHearts) {
+      Sound.rupee();
+      this.state.potions--;
+      this.state.hearts = this.state.maxHearts;
+      this.spawnShockwave(200, 260, '#ff80bf', 85);
+      this.spawnParticles(200, 260, '#ff80bf', 30);
+      this.spawnFloatingText('🧚 ¡BENDICIÓ DE FADA!', 220, 140, '#ffb3d9');
+      this.saveGame();
+      this.updateHUD();
+    }
+  },
+
+  openShop() {
+    this.clearPendingTimeout();
+    this.battle.active = false;
+    this.renderShop();
+    document.getElementById('shop-modal').classList.remove('hidden');
+  },
+
+  closeShop() {
+    document.getElementById('shop-modal').classList.add('hidden');
+    this.updateHUD();
+    if (this.state.hearts <= 0 || !this.battle.inProgress) {
+      this.startBattle(true);
+    } else {
+      this.nextQuestion();
+      this.battle.active = true;
+      this.battle.lastTick = performance.now();
+    }
+  },
+
+  renderShop() {
+    document.getElementById('shop-rupees').textContent = this.state.rupees;
+    const list = document.getElementById('shop-items');
+    list.innerHTML = '';
+
+    const consumables = [
+      {
+        title: '🧚 Fada de Bossella',
+        desc: 'Restaura tots els cors en combat',
+        price: 40,
+        disabled: false,
+        action: () => {
+          if (this.state.rupees >= 40) {
+            this.state.rupees -= 40;
+            this.state.potions++;
+            Sound.rupee();
+            this.saveGame();
+            this.renderShop();
+            this.updateHUD();
+          }
         }
-
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
+      },
+      {
+        title: '❤️ Contenidor de Cor',
+        desc: `Augmenta vida màxima (${this.state.maxHearts}/10)`,
+        price: 120,
+        disabled: this.state.maxHearts >= 10,
+        action: () => {
+          if (this.state.rupees >= 120 && this.state.maxHearts < 10) {
+            this.state.rupees -= 120;
+            this.state.maxHearts++;
+            this.state.hearts = this.state.maxHearts;
+            Sound.secretUnlocked();
+            this.saveGame();
+            this.renderShop();
+            this.updateHUD();
+          }
         }
+      }
+    ];
 
-        let currentActiveInput = null;
-        const state = {
-            rapid: {
-                timerId: null,
-                timeLeft: 0,
-                questionsPool: [],
-                currentQIndex: 0,
-                totalAnswered: 0,
-                correctCount: 0,
-                errors: [],
-                order: 'random'
-            },
-            taules: {
-                selected: new Set([2,3]),
-                order: 'linear',
-                questionsPool: [],
-                currentQIndex: 0,
-                lives: 3,
-                correctCount: 0,
-                maxQuestions: 10
-            }
+    consumables.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'shop-item';
+      div.innerHTML = `<div><div style="font-weight:800; color:var(--gold-bright)">${item.title}</div><div style="font-size:11px; color:#9ab">${item.desc}</div></div>`;
+      const btn = document.createElement('button');
+      btn.className = 'shop-btn';
+      btn.textContent = item.disabled ? 'MÀXIM' : `${item.price} 💎`;
+      btn.disabled = item.disabled || this.state.rupees < item.price;
+      btn.onclick = item.action;
+      div.appendChild(btn);
+      list.appendChild(div);
+    });
+
+    WEAPONS.forEach(w => {
+      const owned = this.state.ownedWeapons.includes(w.id);
+      const equipped = this.state.equippedWeapon === w.id;
+      const div = document.createElement('div');
+      div.className = 'shop-item' + (equipped ? ' equipped' : '');
+      div.innerHTML = `<div><div style="font-weight:800; color:${w.color}">${w.icon} ${w.name}</div><div style="font-size:11px; color:#9ab">Atac base: ${w.dmg}</div></div>`;
+      const btn = document.createElement('button');
+      btn.className = 'shop-btn';
+      if (equipped) {
+        btn.textContent = 'EQUIPADA';
+        btn.disabled = true;
+      } else if (owned) {
+        btn.textContent = 'EQUIPAR';
+        btn.onclick = () => {
+          this.state.equippedWeapon = w.id;
+          Sound.swordSlash();
+          this.saveGame();
+          this.renderShop();
+          this.updateHUD();
         };
+      } else {
+        btn.textContent = `${w.price} 💎`;
+        btn.disabled = this.state.rupees < w.price;
+        btn.onclick = () => {
+          if (this.state.rupees >= w.price) {
+            this.state.rupees -= w.price;
+            this.state.ownedWeapons.push(w.id);
+            this.state.equippedWeapon = w.id;
+            Sound.secretUnlocked();
+            this.saveGame();
+            this.renderShop();
+            this.updateHUD();
+          }
+        };
+      }
+      div.appendChild(btn);
+      list.appendChild(div);
+    });
+  },
 
-        function typeNumpad(val) {
-            if (!currentActiveInput) return;
-            if (val === 'del') {
-                currentActiveInput.value = currentActiveInput.value.slice(0, -1);
-            } else {
-                if (currentActiveInput.value.length < 5) {
-                    currentActiveInput.value += val;
-                }
-            }
-        }
+  updateHUD() {
+    const hBox = document.getElementById('hearts-box');
+    hBox.innerHTML = '';
+    for (let i = 0; i < this.state.maxHearts; i++) {
+      const span = document.createElement('span');
+      span.className = 'heart' + (i >= this.state.hearts ? ' empty' : '');
+      span.textContent = '❤️';
+      hBox.appendChild(span);
+    }
+    document.getElementById('rupees-val').textContent = this.state.rupees;
+    document.getElementById('streak-val').textContent = this.state.streak;
+    document.getElementById('stage-val').textContent = this.state.stage;
+    document.getElementById('potions-val').textContent = this.state.potions;
 
-        function submitNumpad() {
-            if (!currentActiveInput || currentActiveInput.value === '') return;
-            
-            if (currentActiveInput.id === 'rapid-input') {
-                document.getElementById('rapid-form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-            } else if (currentActiveInput.id === 'taules-input') {
-                document.getElementById('taules-form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-            }
-        }
+    const potionBtn = document.getElementById('potion-btn');
+    potionBtn.disabled = (this.state.potions <= 0 || this.state.hearts >= this.state.maxHearts);
 
-        document.addEventListener('keydown', (e) => {
-            if (!currentActiveInput) return;
-            const viewHome = document.getElementById('view-home').classList.contains('active');
-            if (viewHome) return; 
+    const w = WEAPONS.find(x => x.id === this.state.equippedWeapon) || WEAPONS[0];
+    document.getElementById('weapon-badge').textContent = `${w.icon} ${w.name}`;
+  },
 
-            if (e.key >= '0' && e.key <= '9') {
-                e.preventDefault();
-                typeNumpad(e.key);
-            } else if (e.key === 'Backspace') {
-                e.preventDefault();
-                typeNumpad('del');
-            } else if (e.key === 'Enter') {
-                e.preventDefault();
-                submitNumpad();
-            }
+  spawnParticles(x, y, color, count = 20) {
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 7 + 2;
+      this.battle.particles.push({
+        x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 2,
+        size: Math.random() * 3.5 + 1.5, life: 1, color, spark: Math.random() > 0.5
+      });
+    }
+  },
+  spawnSlash(x, y, color, isCrit) { this.battle.slashes.push({ x, y, color, isCrit, life: 1.0 }); },
+  spawnShockwave(x, y, color, maxR) { this.battle.shockwaves.push({ x, y, color, r: 6, maxR, life: 1.0 }); },
+  spawnFloatingText(text, x, y, color) { this.battle.floatingTexts.push({ text, x, y, life: 1, color }); },
+
+  loop(timestamp) {
+    const dt = Math.min(0.1, Math.max(0, (timestamp - this.battle.lastTick) / 1000));
+    this.battle.lastTick = timestamp;
+
+    if (this.battle.active) {
+      const speed = 100 / Math.max(6, this.battle.maxTime - this.state.stage * 0.1);
+      this.battle.timer -= speed * dt;
+      document.getElementById('timer-bar').style.width = Math.max(0, this.battle.timer) + '%';
+
+      if (this.battle.timer <= 0) {
+        const btns = document.querySelectorAll('.rune-btn');
+        btns.forEach(b => {
+          b.disabled = true;
+          if (parseInt(b.textContent) === this.battle.currentQ.ans) b.classList.add('correct');
         });
+        this.onMonsterAttack();
+      }
+    }
 
-        function navigate(viewId) {
-            document.querySelectorAll('.view').forEach(el => {
-                el.classList.remove('active');
-            });
-            document.getElementById(`view-${viewId}`).classList.add('active');
-            window.scrollTo(0, 0); 
-            
-            if (viewId === 'rapid-game') currentActiveInput = document.getElementById('rapid-input');
-            else if (viewId === 'taules-game') currentActiveInput = document.getElementById('taules-input');
-            else currentActiveInput = null;
-        }
+    this.draw(timestamp);
+    requestAnimationFrame((t) => this.loop(t));
+  },
 
-        document.querySelectorAll('.segmented-control').forEach(control => {
-            const segments = control.querySelectorAll('.segment');
-            segments.forEach(seg => {
-                seg.addEventListener('click', () => {
-                    segments.forEach(s => s.classList.remove('active'));
-                    seg.classList.add('active');
-                    
-                    if (control.id === 'rapid-order-control') {
-                        state.rapid.order = seg.dataset.val;
-                    } else if (control.id === 'taules-order-control') {
-                        state.taules.order = seg.dataset.val;
-                    }
-                });
-            });
-        });
+  draw(t) {
+    const ctx = this.ctx;
+    const isBoss = (this.state.stage % 5 === 0);
+    ctx.save();
 
-        const grid = document.getElementById('tables-grid');
-        for (let i = 1; i <= 10; i++) {
-            const btn = document.createElement('div');
-            btn.className = `table-btn ${state.taules.selected.has(i) ? 'selected' : ''}`;
-            btn.textContent = i;
-            btn.onclick = () => {
-                if (state.taules.selected.has(i)) {
-                    state.taules.selected.delete(i);
-                    btn.classList.remove('selected');
-                } else {
-                    state.taules.selected.add(i);
-                    btn.classList.add('selected');
-                }
-                updateTaulesMaxCount();
-            };
-            grid.appendChild(btn);
-        }
+    if (this.battle.screenShake > 0) {
+      const dx = (Math.random() - 0.5) * this.battle.screenShake;
+      const dy = (Math.random() - 0.5) * this.battle.screenShake;
+      ctx.translate(dx, dy);
+      this.battle.screenShake *= 0.85;
+      if (this.battle.screenShake < 0.5) this.battle.screenShake = 0;
+    }
 
-        function toggleAllTables() {
-            const btns = document.querySelectorAll('.table-btn');
-            if (state.taules.selected.size === 10) {
-                state.taules.selected.clear();
-                btns.forEach(b => b.classList.remove('selected'));
-            } else {
-                for (let i = 1; i <= 10; i++) state.taules.selected.add(i);
-                btns.forEach(b => b.classList.add('selected'));
-            }
-            updateTaulesMaxCount();
-        }
+    // CIELO
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, 340);
+    if (isBoss) {
+      skyGrad.addColorStop(0, '#1a050d');
+      skyGrad.addColorStop(1, '#3d0c1d');
+    } else {
+      skyGrad.addColorStop(0, '#050b14');
+      skyGrad.addColorStop(1, '#163438');
+    }
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, 900, 420);
 
-        function updateTaulesMaxCount() {
-            const countInput = document.getElementById('taules-count');
-            const totalPossible = state.taules.selected.size * 10;
-            if (totalPossible === 0) {
-                countInput.value = 0;
-            } else if (parseInt(countInput.value) > totalPossible || state.taules.selected.size === 1) {
-                countInput.value = Math.min(10, totalPossible);
-            }
-        }
+    // LUNA
+    const moonX = 740, moonY = 90;
+    ctx.fillStyle = isBoss ? 'rgba(255, 30, 78, 0.3)' : 'rgba(0, 225, 255, 0.15)';
+    ctx.beginPath();
+    ctx.arc(moonX, moonY, 80, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = isBoss ? '#ff3b5c' : '#fff8d6';
+    ctx.beginPath();
+    ctx.arc(moonX, moonY, 32, 0, Math.PI * 2);
+    ctx.fill();
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
+    // ESTRELLAS
+    this.battle.stars.forEach(s => {
+      s.y -= s.speed;
+      if (s.y < 0) s.y = 320;
+      ctx.fillStyle = isBoss ? '#ff99ac' : '#00ffa6';
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
 
-        function startRapidGame() {
-            const add = document.getElementById('toggle-add').checked;
-            const sub = document.getElementById('toggle-sub').checked;
-            const mul = document.getElementById('toggle-mul').checked;
-            
-            if (!add && !sub && !mul) {
-                alert("Si us plau, selecciona almenys un tipus d'operació.");
-                return;
-            }
+    // ISLAS CELESTES
+    this.battle.skyIslands.forEach(isl => {
+      const iy = isl.y + Math.sin(t * 0.002 + isl.phase) * 4;
+      ctx.fillStyle = '#1f323d';
+      ctx.beginPath();
+      ctx.roundRect(isl.x, iy, isl.w, isl.h, 6);
+      ctx.fill();
+      ctx.fillStyle = '#e8c368';
+      ctx.fillRect(isl.x, iy, isl.w, 4);
+    });
 
-            const min = parseInt(document.getElementById('rapid-min').value) || 0;
-            const sec = parseInt(document.getElementById('rapid-sec').value) || 0;
-            state.rapid.timeLeft = (min * 60) + sec;
-            
-            if (state.rapid.timeLeft <= 0) {
-                alert("El temps ha de ser superior a 0.");
-                return;
-            }
+    // SUELO
+    ctx.fillStyle = '#0f261c';
+    ctx.fillRect(0, 335, 900, 90);
+    ctx.strokeStyle = isBoss ? '#ff1e4e' : '#00ffa6';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, 335);
+    ctx.lineTo(900, 335);
+    ctx.stroke();
 
-            let pool = [];
-            if (add) {
-                for (let i = 1; i <= 10; i++) {
-                    for (let j = 1; j <= 10; j++) pool.push({ q: `${i} + ${j}`, a: i + j, type: 'add' });
-                }
-            }
-            if (sub) {
-                for (let i = 1; i <= 10; i++) {
-                    for (let j = 1; j <= 10; j++) {
-                        let total = i + j;
-                        pool.push({ q: `${total} - ${i}`, a: j, type: 'sub' });
-                    }
-                }
-            }
-            if (mul) {
-                for (let i = 1; i <= 10; i++) {
-                    for (let j = 1; j <= 10; j++) pool.push({ q: `${i} × ${j}`, a: i * j, type: 'mul' });
-                }
-            }
+    // DIBUJAR HÉROE (ARNAU)
+    this.drawHero(ctx, t);
 
-            if (state.rapid.order === 'random') {
-                shuffleArray(pool);
-                state.rapid.questionsPool = [...pool, ...pool, ...pool, ...pool, ...pool]; 
-                shuffleArray(state.rapid.questionsPool);
-            } else {
-                let orderedPool = [];
-                if (add) orderedPool = orderedPool.concat(pool.filter(p => p.type === 'add'));
-                if (sub) orderedPool = orderedPool.concat(pool.filter(p => p.type === 'sub'));
-                if (mul) orderedPool = orderedPool.concat(pool.filter(p => p.type === 'mul'));
-                state.rapid.questionsPool = [...orderedPool, ...orderedPool, ...orderedPool, ...orderedPool];
-            }
+    // DIBUJAR MONSTRUO
+    if (this.battle.monster) {
+      this.drawMonster(ctx, t);
+    }
 
-            state.rapid.currentQIndex = 0;
-            state.rapid.totalAnswered = 0;
-            state.rapid.correctCount = 0;
-            state.rapid.errors = [];
-            
-            updateRapidTimerUI();
-            showNextRapidQuestion();
-            navigate('rapid-game');
+    // EFECTOS VISUALES (Ondas, cortes, partículas, textos)
+    for (let i = this.battle.shockwaves.length - 1; i >= 0; i--) {
+      const sw = this.battle.shockwaves[i];
+      sw.r += (sw.maxR - sw.r) * 0.2;
+      sw.life -= 0.06;
+      if (sw.life <= 0) { this.battle.shockwaves.splice(i, 1); continue; }
+      ctx.save();
+      ctx.globalAlpha = sw.life;
+      ctx.strokeStyle = sw.color;
+      ctx.lineWidth = 3.5 * sw.life;
+      ctx.beginPath();
+      ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
 
-            clearInterval(state.rapid.timerId);
-            state.rapid.timerId = setInterval(() => {
-                state.rapid.timeLeft--;
-                updateRapidTimerUI();
-                if (state.rapid.timeLeft <= 0) {
-                    endRapidGame(false);
-                }
-            }, 1000);
-        }
+    for (let i = this.battle.slashes.length - 1; i >= 0; i--) {
+      const sl = this.battle.slashes[i];
+      sl.life -= 0.08;
+      if (sl.life <= 0) { this.battle.slashes.splice(i, 1); continue; }
+      ctx.save();
+      ctx.translate(sl.x, sl.y);
+      ctx.rotate(-0.5);
+      ctx.globalAlpha = sl.life;
+      ctx.strokeStyle = sl.color;
+      ctx.lineWidth = (sl.isCrit ? 12 : 7) * sl.life;
+      ctx.beginPath();
+      ctx.arc(0, 0, sl.isCrit ? 75 : 55, -Math.PI * 0.4, Math.PI * 0.4);
+      ctx.stroke();
+      ctx.restore();
+    }
 
-        function updateRapidTimerUI() {
-            const m = String(Math.floor(state.rapid.timeLeft / 60)).padStart(2, '0');
-            const s = String(state.rapid.timeLeft % 60).padStart(2, '0');
-            const timerEl = document.getElementById('rapid-timer-display');
-            timerEl.textContent = `${m}:${s}`;
-            
-            if (state.rapid.timeLeft <= 10) {
-                timerEl.classList.add('text-iosRed');
-                timerEl.classList.remove('text-iosText');
-            } else {
-                timerEl.classList.remove('text-iosRed');
-                timerEl.classList.add('text-iosText');
-            }
-        }
+    for (let i = this.battle.particles.length - 1; i >= 0; i--) {
+      const p = this.battle.particles[i];
+      p.x += p.vx; p.y += p.vy; p.vy += 0.25; p.life -= 0.03;
+      if (p.life <= 0) { this.battle.particles.splice(i, 1); continue; }
+      ctx.save();
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
 
-        function showNextRapidQuestion() {
-            if (state.rapid.currentQIndex >= state.rapid.questionsPool.length) {
-                state.rapid.currentQIndex = 0; 
-            }
-            const q = state.rapid.questionsPool[state.rapid.currentQIndex];
-            document.getElementById('rapid-question').textContent = q.q;
-            
-            const input = document.getElementById('rapid-input');
-            input.value = '';
-        }
+    for (let i = this.battle.floatingTexts.length - 1; i >= 0; i--) {
+      const ft = this.battle.floatingTexts[i];
+      ft.y -= 1.3; ft.life -= 0.022;
+      if (ft.life <= 0) { this.battle.floatingTexts.splice(i, 1); continue; }
+      ctx.save();
+      ctx.globalAlpha = ft.life;
+      ctx.font = '800 21px Quicksand, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#000';
+      ctx.strokeText(ft.text, ft.x, ft.y);
+      ctx.fillStyle = ft.color;
+      ctx.fillText(ft.text, ft.x, ft.y);
+      ctx.restore();
+    }
 
-        function handleRapidSubmit(e) {
-            e.preventDefault();
-            const inputEl = document.getElementById('rapid-input');
-            const val = parseInt(inputEl.value, 10);
-            if (isNaN(val)) return;
+    ctx.restore();
+  },
 
-            const q = state.rapid.questionsPool[state.rapid.currentQIndex];
-            state.rapid.totalAnswered++;
-            
-            if (val === q.a) {
-                state.rapid.correctCount++;
-            } else {
-                state.rapid.errors.push({ q: q.q, user: val, correct: q.a });
-            }
+  drawHero(ctx, t) {
+    this.battle.heroAnim.attackOffset *= 0.8;
+    this.battle.heroAnim.swingTime *= 0.82;
+    const hx = this.battle.heroAnim.x + this.battle.heroAnim.attackOffset;
+    const hy = 270 + Math.sin(t * 0.005) * 3;
 
-            state.rapid.currentQIndex++;
-            showNextRapidQuestion();
-        }
+    ctx.save();
+    if (this.battle.heroAnim.hurtFlash > 0) {
+      this.battle.heroAnim.hurtFlash--;
+      ctx.globalAlpha = this.battle.heroAnim.hurtFlash % 2 ? 0.35 : 1;
+    }
 
-        function endRapidGame(manual = false) {
-            clearInterval(state.rapid.timerId);
-            
-            document.getElementById('res-total').textContent = state.rapid.totalAnswered;
-            document.getElementById('res-correct').textContent = state.rapid.correctCount;
-            document.getElementById('res-errors').textContent = state.rapid.errors.length;
-            
-            let perc = 0;
-            if (state.rapid.totalAnswered > 0) {
-                perc = Math.round((state.rapid.correctCount / state.rapid.totalAnswered) * 100);
-            }
-            document.getElementById('res-percentage').textContent = `${perc}%`;
+    // Sombra
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.beginPath();
+    ctx.ellipse(hx, 342, 32, 9, 0, 0, Math.PI * 2);
+    ctx.fill();
 
-            const errCont = document.getElementById('errors-container');
-            const errList = document.getElementById('errors-list');
-            errList.innerHTML = '';
+    // Túnica Campeón
+    ctx.fillStyle = '#1985a1';
+    ctx.fillRect(hx - 18, hy - 15, 36, 45);
 
-            if (state.rapid.errors.length > 0) {
-                errCont.classList.remove('hidden');
-                state.rapid.errors.forEach(err => {
-                    const li = document.createElement('li');
-                    li.className = "py-4 px-4 flex justify-between items-center text-xl";
-                    li.innerHTML = `
-                        <span class="font-extrabold">${err.q} = </span>
-                        <div class="flex items-center space-x-5">
-                            <span class="text-iosRed line-through font-bold">${err.user}</span>
-                            <span class="text-iosGreen font-black">${err.correct}</span>
-                        </div>
-                    `;
-                    errList.appendChild(li);
-                });
-            } else {
-                errCont.classList.add('hidden');
-            }
+    // Gorro
+    ctx.fillStyle = '#1f6e43';
+    ctx.beginPath();
+    ctx.moveTo(hx - 12, hy - 38);
+    ctx.lineTo(hx - 50, hy - 25);
+    ctx.lineTo(hx + 8, hy - 25);
+    ctx.fill();
 
-            navigate('rapid-results');
-        }
+    // Cabeza
+    ctx.fillStyle = '#ffdfb3';
+    ctx.beginPath();
+    ctx.arc(hx, hy - 28, 16, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#f4d03f';
+    ctx.beginPath();
+    ctx.arc(hx - 2, hy - 32, 16, Math.PI * 0.8, Math.PI * 2.1);
+    ctx.fill();
 
-        function startTaulesGame() {
-            if (state.taules.selected.size === 0) {
-                alert("Si us plau, tria almenys una taula.");
-                return;
-            }
+    // Arma equipada
+    const weapon = WEAPONS.find(w => w.id === this.state.equippedWeapon) || WEAPONS[0];
+    ctx.save();
+    ctx.translate(hx + 15, hy + 2);
+    const angle = this.battle.heroAnim.swingTime > 0.1 ? 1.0 : -0.35;
+    ctx.rotate(angle);
+    ctx.fillStyle = weapon.color;
+    ctx.fillRect(-3, -48, 6, 42);
+    ctx.restore();
 
-            let maxQ = parseInt(document.getElementById('taules-count').value) || 10;
-            
-            let pool = [];
-            state.taules.selected.forEach(t => {
-                for (let i = 1; i <= 10; i++) {
-                    pool.push({ q: `${t} × ${i}`, a: t * i, t: t, i: i });
-                }
-            });
+    ctx.fillStyle = '#fff3b0';
+    ctx.font = '900 12px Cinzel, serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('ARNAU', hx, hy - 52);
+    ctx.restore();
+  },
 
-            if (state.taules.order === 'random') {
-                shuffleArray(pool);
-            } else {
-                pool.sort((a, b) => {
-                    if (a.t !== b.t) return a.t - b.t;
-                    return a.i - b.i;
-                });
-            }
+  drawMonster(ctx, t) {
+    this.battle.monsterAnim.attackOffset *= 0.8;
+    let mx = this.battle.monsterAnim.x + this.battle.monsterAnim.attackOffset;
+    if (this.battle.monsterAnim.hitShake > 0) {
+      mx += (Math.random() - 0.5) * 18;
+      this.battle.monsterAnim.hitShake--;
+    }
+    const my = 265 + Math.sin(t * 0.006) * 5;
+    const m = this.battle.monster;
 
-            state.taules.questionsPool = pool.slice(0, maxQ);
-            state.taules.maxQuestions = state.taules.questionsPool.length;
-            state.taules.currentQIndex = 0;
-            state.taules.lives = 3;
-            state.taules.correctCount = 0;
+    ctx.save();
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.beginPath();
+    ctx.ellipse(mx, 342, 42, 11, 0, 0, Math.PI * 2);
+    ctx.fill();
 
-            updateLivesUI();
-            showNextTaulesQuestion();
-            navigate('taules-game');
-        }
+    ctx.fillStyle = m.color;
+    ctx.beginPath();
+    if (m.type === 'golem' || m.type === 'boss') {
+      ctx.roundRect(mx - 40, my - 45, 80, 85, 10);
+    } else {
+      ctx.arc(mx, my, 38, 0, Math.PI * 2);
+    }
+    ctx.fill();
 
-        function updateLivesUI() {
-            const hearts = document.querySelectorAll('#hearts-container .heart');
-            hearts.forEach((h, idx) => {
-                if (idx < state.taules.lives) {
-                    h.classList.add('filled');
-                } else {
-                    if (h.classList.contains('filled')) {
-                        h.classList.remove('filled');
-                        h.classList.add('pop');
-                        setTimeout(() => h.classList.remove('pop'), 300);
-                    }
-                }
-            });
-        }
+    ctx.fillStyle = m.eyeColor;
+    ctx.beginPath();
+    ctx.arc(mx - 14, my - 10, 6, 0, Math.PI * 2);
+    ctx.arc(mx + 14, my - 10, 6, 0, Math.PI * 2);
+    ctx.fill();
 
-        function showNextTaulesQuestion() {
-            document.getElementById('taules-progress').textContent = `${state.taules.currentQIndex + 1}/${state.taules.maxQuestions}`;
-            const q = state.taules.questionsPool[state.taules.currentQIndex];
-            document.getElementById('taules-question').textContent = q.q;
-            
-            const input = document.getElementById('taules-input');
-            input.value = '';
-            input.style.color = 'var(--ios-text)';
-            
-            const feedback = document.getElementById('taules-feedback');
-            feedback.style.opacity = '0';
-        }
+    // Barra de vida
+    const barW = 90, barH = 9;
+    const bx = mx - barW / 2, by = my - 72;
+    const hpPercent = Math.max(0, m.hp / m.maxHp);
+    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+    ctx.fillRect(bx, by, barW, barH);
+    ctx.fillStyle = '#ff1e4e';
+    ctx.fillRect(bx, by, barW * hpPercent, barH);
+    ctx.restore();
+  }
+};
 
-        function handleTaulesSubmit(e) {
-            e.preventDefault();
-            const inputEl = document.getElementById('taules-input');
-            const val = parseInt(inputEl.value, 10);
-            if (isNaN(val)) return;
+/* ==========================================================
+   CONTROL DE NAVEGACIÓN Y CONFIGURACIÓN INICIAL
+   ========================================================== */
+function navigate(viewId) {
+    document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+    document.getElementById(`view-${viewId}`).classList.add('active');
+    window.scrollTo(0, 0);
+}
 
-            const q = state.taules.questionsPool[state.taules.currentQIndex];
-            const card = document.getElementById('taules-card');
-            const feedback = document.getElementById('taules-feedback');
+function startGame() {
+    Game.state.allowAdd = document.getElementById('toggle-add').checked;
+    Game.state.allowSub = document.getElementById('toggle-sub').checked;
+    Game.state.allowMul = document.getElementById('toggle-mul').checked;
 
-            if (val === q.a) {
-                state.taules.correctCount++;
-                inputEl.style.color = 'var(--ios-green)';
-                
-                setTimeout(() => {
-                    state.taules.currentQIndex++;
-                    if (state.taules.currentQIndex >= state.taules.maxQuestions) {
-                        endTaulesGame(true);
-                    } else {
-                        showNextTaulesQuestion();
-                    }
-                }, 400);
+    if (!Game.state.allowAdd && !Game.state.allowSub && !Game.state.allowMul) {
+        alert("Si us plau, selecciona almenys un tipus d'operació.");
+        return;
+    }
 
-            } else {
-                state.taules.lives--;
-                updateLivesUI();
-                
-                card.classList.remove('error-shake');
-                void card.offsetWidth; 
-                card.classList.add('error-shake');
-                
-                feedback.textContent = `Era ${q.a}`;
-                feedback.style.opacity = '1';
-
-                if (state.taules.lives <= 0) {
-                    setTimeout(() => endTaulesGame(false), 1500);
-                } else {
-                    setTimeout(() => {
-                        inputEl.value = '';
-                        feedback.style.opacity = '0';
-                    }, 1500);
-                }
-            }
-        }
-
-        function endTaulesGame(won) {
-            const icon = document.getElementById('taules-res-icon');
-            const title = document.getElementById('taules-res-title');
-            const desc = document.getElementById('taules-res-desc');
-            
-            document.getElementById('taules-res-score').textContent = state.taules.correctCount;
-
-            if (won) {
-                icon.textContent = '🏆';
-                title.textContent = 'Molt bé, Arnau!';
-                title.className = 'text-4xl font-extrabold mb-3 text-[var(--ios-green)] tracking-tight';
-                desc.textContent = "Has completat totes les operacions.";
-            } else {
-                icon.textContent = '💔';
-                title.textContent = 'Game Over';
-                title.className = 'text-4xl font-extrabold mb-3 text-[var(--ios-red)] tracking-tight';
-                desc.textContent = "T'has quedat sense vides. Torna-ho a intentar!";
-            }
-            
-            navigate('taules-results');
-        }
-
-    </script>
+    Game.startBattle();
+}
+</script>
 </body>
 </html>
